@@ -1,13 +1,15 @@
 package com.brunofelixdev.mytodoapp.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagedList
+import androidx.paging.LoadState
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
@@ -16,8 +18,11 @@ import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ItemFragment : Fragment() {
@@ -27,9 +32,11 @@ class ItemFragment : Fragment() {
 
     private val viewModel: ItemViewModel by viewModels()
 
-    private var uiStateJob: Job? = null
+    @Inject
+    lateinit var adapter: ItemAdapter
 
     companion object {
+        private val TAG: String = ItemFragment::class.java.simpleName
         lateinit var optionsMenu: Menu
     }
 
@@ -39,27 +46,9 @@ class ItemFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        val adapter = ItemAdapter()
-        viewModel.items.observe(this, { data ->
-            adapter.submitList(data)
-        })
-
-        binding.progressBar.isVisible = false
-        binding.rvItems.isVisible = true
-        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        binding.rvItems.adapter = adapter
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onStop() {
-        uiStateJob?.cancel()
-        super.onStop()
     }
 
     override fun onDestroy() {
@@ -87,6 +76,15 @@ class ItemFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        viewModel.fetchItems()
+        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.rvItems.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.itemsList.collect { items ->
+                //binding.progressBar.isVisible = false
+                //binding.rvItems.isVisible = true
+                adapter.submitData(items)
+            }
+        }
     }
 }

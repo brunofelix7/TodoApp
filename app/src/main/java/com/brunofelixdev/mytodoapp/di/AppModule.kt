@@ -2,11 +2,12 @@ package com.brunofelixdev.mytodoapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.brunofelixdev.mytodoapp.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.data.db.AppDatabase
 import com.brunofelixdev.mytodoapp.data.db.DbSchema
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.repository.ItemRepository
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,10 +35,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideItemRepository(dao: ItemDao): ItemRepositoryContract = ItemRepository(dao)
+    fun provideItemRepository(dao: ItemDao): ItemContract = ItemRepository(dao)
 
     @Singleton
     @Provides
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Singleton
+    @Provides
+    fun provideItemAdapter(): ItemAdapter = ItemAdapter()
 
 }
