@@ -16,10 +16,13 @@
     <string name="cd_add">Add</string>
     <string name="cd_calendar_image">Calendar_Image</string>
 
+    <!-- Fragments labels -->
     <string name="label_home">@string/app_name</string>
     <string name="label_settings">@string/title_settings</string>
     <string name="label_add_item">Create new item</string>
     <string name="label_edit_item">Update item</string>
+
+    <string name="txt_btn_retry">Retry</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

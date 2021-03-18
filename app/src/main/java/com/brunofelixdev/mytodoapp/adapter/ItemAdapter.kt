@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import com.brunofelixdev.mytodoapp.adapter.viewholder.ItemViewHolder
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
 
-class ItemAdapter : PagingDataAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK) {
+class ItemAdapter : PagingDataAdapter<Item, ItemViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val root =  RowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,15 +16,9 @@ class ItemAdapter : PagingDataAdapter<Item, ItemAdapter.ItemViewHolder>(DIFF_CAL
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item: Item? = getItem(position)
-        holder.bind(item)
-    }
-
-    inner class ItemViewHolder(private val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item?) {
-            binding.tvName.text = item?.name
-            binding.tvDueDate.text = item?.dueDate
+        val item = getItem(position)
+        if (item != null){
+            holder.bind(item)
         }
     }
 

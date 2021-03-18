@@ -10,6 +10,7 @@ import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -25,7 +26,7 @@ class ItemViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
 
-    private val _itemsList = Pager(PagingConfig(pageSize = 20, enablePlaceholders = false)) {
+    val itemsList = Pager(PagingConfig(pageSize = 20, enablePlaceholders = false)) {
         repository.fetchAll()
     }.flow.cachedIn(viewModelScope)
 
@@ -33,20 +34,18 @@ class ItemViewModel @Inject constructor(
 
     }
 
-    fun fetchItems() {
-        viewModelScope.launch(defaultDispatcher) {
-            _uiStateFlow.value = UiState.Loading
+    fun updateItem(){
 
-            _itemsList.collect {
-                _uiStateFlow.value = UiState.Success(it)
-            }
-        }
+    }
+
+    fun deleteItem(){
+
     }
 
     sealed class UiState {
         object Initial: UiState()
         object Loading: UiState()
-        class Success(val items: PagingData<Item>): UiState()
+        class Success(val items: Flow<PagingData<Item>>): UiState()
         class Error(val errorMessage: String): UiState()
     }
 }
