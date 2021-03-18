@@ -16,7 +16,7 @@ class ItemRepository @Inject constructor(
         private val TAG: String = ItemContract::class.java.simpleName
     }
 
-    override fun insert(item: Item): DataResult<Long> {
+    override suspend fun insert(item: Item): DataResult<Long> {
         return try {
             val result = dao.insert(item)
 

@@ -19,6 +19,7 @@ import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,13 +28,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ItemFragment : Fragment() {
 
+    @Inject
+    lateinit var adapter: ItemAdapter
+
     private var _binding: FragmentItemBinding? = null
+
     private val binding: FragmentItemBinding get() = _binding!!
 
     private val viewModel: ItemViewModel by viewModels()
 
-    @Inject
-    lateinit var adapter: ItemAdapter
+    private var uiStateJob: Job? = null
 
     companion object {
         private val TAG: String = ItemFragment::class.java.simpleName
@@ -49,6 +53,32 @@ class ItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        uiStateJob = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.uiStateFlow.collect { uiState ->
+                when(uiState) {
+                    is ItemViewModel.UiState.Loading -> {
+                        binding.progressBar.isVisible = true
+                        binding.rvItems.isVisible = false
+                    }
+                    is ItemViewModel.UiState.Success -> {
+                        binding.progressBar.isVisible = false
+                        binding.rvItems.isVisible = true
+                        adapter.submitData( uiState.items)
+                    }
+                    else -> Unit
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        uiStateJob?.cancel()
+        super.onStop()
     }
 
     override fun onDestroy() {
@@ -79,12 +109,6 @@ class ItemFragment : Fragment() {
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.rvItems.adapter = adapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.itemsList.collect { items ->
-                //binding.progressBar.isVisible = false
-                //binding.rvItems.isVisible = true
-                adapter.submitData(items)
-            }
-        }
+        viewModel.fetchItems()
     }
 }

@@ -8,13 +8,13 @@ import com.brunofelixdev.mytodoapp.data.db.entity.Item
 interface ItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(item: Item): Long
+    suspend fun insert(item: Item): Long
 
     @Update
-    fun update(item: Item)
+    suspend fun update(item: Item)
 
     @Delete
-    fun delete(item: Item)
+    suspend fun delete(item: Item)
 
     @Query("SELECT * FROM items")
     fun fetchAll(): PagingSource<Int, Item>
