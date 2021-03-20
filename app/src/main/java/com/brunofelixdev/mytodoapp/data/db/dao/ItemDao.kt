@@ -16,7 +16,7 @@ interface ItemDao {
     @Delete
     suspend fun delete(item: Item)
 
-    @Query("SELECT * FROM items")
+    @Query("SELECT * FROM items WHERE isDone == 'false'")
     fun fetchAll(): PagingSource<Int, Item>
 
 }
