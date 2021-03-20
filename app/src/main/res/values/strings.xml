@@ -9,8 +9,9 @@
     <!-- TODO: Options Menu -->
     <string name="title_action_search">Search</string>
     <string name="title_action_filter">Sort by</string>
-    <string name="title_action_check">Check</string>
+    <string name="title_action_check">Done</string>
     <string name="title_action_delete">Delete</string>
+    <string name="title_action_add">Add</string>
 
     <!-- TODO: Content descriptions -->
     <string name="cd_ic_checklist">Logo icon</string>

@@ -3,14 +3,14 @@ package com.brunofelixdev.mytodoapp.ui.fragment
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.DatePicker
 import androidx.fragment.app.Fragment
+import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.databinding.FragmentAddItemBinding
 import com.brunofelixdev.mytodoapp.extension.hideKeyboard
 import com.brunofelixdev.mytodoapp.extension.myCustomMask
+import com.brunofelixdev.mytodoapp.extension.toast
 import java.util.*
 
 class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
@@ -26,6 +26,11 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         private const val CALENDAR_MASK = "##/##/####"
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,6 +44,35 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onDestroyView() {
         super.onDestroyView()
         activity?.hideKeyboard()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.options_add_menu, menu)
+        ItemFragment.optionsMenu = menu
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add -> {
+                activity?.toast("Add a new item...")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        this.day = dayOfMonth
+        this.month = month
+        this.year = year
+
+        val pickedDay = if (dayOfMonth < 10) "0${this.day}" else dayOfMonth.toString()
+        val pickedMonth = if (month < 10) "0${this.month}" else month.toString()
+        val pickedYear = year.toString()
+
+        getDateTimeCalendar()
+
+        binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
     }
 
     private fun initViews() {
@@ -58,18 +92,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         this.year = now.get(Calendar.YEAR)
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        this.day = dayOfMonth
-        this.month = month
-        this.year = year
-
-        val pickedDay = if (dayOfMonth < 10) "0${this.day}" else dayOfMonth.toString()
-        val pickedMonth = if (month < 10) "0${this.month}" else month.toString()
-        val pickedYear = year.toString()
-
-        getDateTimeCalendar()
-
-        binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
+    private fun submitForm() {
+        //  TODO: Valid...
     }
 }
