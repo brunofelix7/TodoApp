@@ -28,9 +28,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        binding = ActivityMainBinding.inflate(layoutInflater).apply {
-            setContentView(root)
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         drawerMenuSetup()
     }
 

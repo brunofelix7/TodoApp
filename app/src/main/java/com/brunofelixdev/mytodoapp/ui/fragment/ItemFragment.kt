@@ -17,6 +17,7 @@ import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,21 +25,22 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ItemFragment : Fragment() {
 
-    @Inject
-    lateinit var adapter: ItemAdapter
-
     private var _binding: FragmentItemBinding? = null
-
     private val binding: FragmentItemBinding get() = _binding!!
 
     private val viewModel: ItemViewModel by viewModels()
+
+    private var uiStateJob: Job? = null
+
+    @Inject
+    lateinit var adapter: ItemAdapter
 
     companion object {
         private val TAG: String = ItemFragment::class.java.simpleName
         lateinit var optionsMenu: Menu
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentItemBinding.inflate(inflater, container, false)
         initViews()
         initAdapter()
@@ -51,9 +53,9 @@ class ItemFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
+    override fun onStop() {
+        uiStateJob?.cancel()
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -101,7 +103,7 @@ class ItemFragment : Fragment() {
     }
 
     private fun collectData() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.itemsList.collect {
                 adapter.submitData(it)
             }
