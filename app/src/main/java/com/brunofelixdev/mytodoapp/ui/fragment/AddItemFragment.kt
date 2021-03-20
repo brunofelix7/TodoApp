@@ -3,7 +3,6 @@ package com.brunofelixdev.mytodoapp.ui.fragment
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import androidx.core.view.isVisible
@@ -107,14 +106,6 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         this.year = now.get(Calendar.YEAR)
     }
 
-    private fun submitForm() {
-        val item = Item().apply {
-            name = binding.etName.text.toString()
-            dueDate = binding.etDueDate.text.toString()
-        }
-        viewModel.insertItem(item)
-    }
-
     private fun collectData() {
         uiStateJob = lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
@@ -137,6 +128,14 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 }
             }
         }
+    }
+
+    private fun submitForm() {
+        val item = Item().apply {
+            name = binding.etName.text.toString()
+            dueDate = binding.etDueDate.text.toString()
+        }
+        viewModel.insertItem(item)
     }
 
     private fun checkFormErrors() {

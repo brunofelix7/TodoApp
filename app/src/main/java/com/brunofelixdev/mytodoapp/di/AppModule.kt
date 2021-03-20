@@ -8,6 +8,7 @@ import com.brunofelixdev.mytodoapp.data.db.DbSchema
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.repository.ItemRepository
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,5 +45,9 @@ object AppModule {
     @Singleton
     @Provides
     fun provideItemAdapter(): ItemAdapter = ItemAdapter()
+
+    @Singleton
+    @Provides
+    fun provideResourceProvider(@ApplicationContext context: Context) = ResourceProvider(context)
 
 }

@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.DataResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
+    private val resourcesProvider: ResourceProvider,
     private val repository: ItemRepositoryContract,
     private val defaultDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -40,27 +43,35 @@ class ItemViewModel @Inject constructor(
             formValidation(item)
 
             if (formErrors.isNotEmpty()) {
-                _uiStateFlow.value = UiState.Error("All fields are required.")
+                _uiStateFlow.value = UiState.Error(
+                    resourcesProvider.getResources().getString(R.string.msg_fields_required)
+                )
             } else {
                 _uiStateFlow.value = UiState.Loading
 
-                when(repository.insert(item)) {
+                when (repository.insert(item)) {
                     is DataResult.Error -> {
-                        _uiStateFlow.value = UiState.Error("Oops! Try again.")
+                        _uiStateFlow.value =
+                            UiState.Error(
+                                resourcesProvider.getResources().getString(R.string.msg_fail_add)
+                            )
                     }
                     is DataResult.Success -> {
-                        _uiStateFlow.value = UiState.Success("Item successfully created..")
+                        _uiStateFlow.value =
+                            UiState.Success(
+                                resourcesProvider.getResources().getString(R.string.msg_success_add)
+                            )
                     }
                 }
             }
         }
     }
 
-    fun updateItem(){
+    fun updateItem() {
 
     }
 
-    fun deleteItem(){
+    fun deleteItem() {
 
     }
 
@@ -68,17 +79,17 @@ class ItemViewModel @Inject constructor(
         formErrors.clear()
 
         if (item.name.isEmpty()) {
-            formErrors[FIELD_NAME] = "Name is required"
+            formErrors[FIELD_NAME] = resourcesProvider.getResources().getString(R.string.msg_required_name)
         }
         if (item.dueDate.isEmpty() || item.dueDate.length < 10) {
-            formErrors[FIELD_DUE_DATE] = "Due date is required"
+            formErrors[FIELD_DUE_DATE] = resourcesProvider.getResources().getString(R.string.msg_required_due_date)
         }
     }
 
     sealed class UiState {
-        object Initial: UiState()
-        object Loading: UiState()
-        class Success(val successMessage: String): UiState()
-        class Error(val errorMessage: String): UiState()
+        object Initial : UiState()
+        object Loading : UiState()
+        class Success(val successMessage: String) : UiState()
+        class Error(val errorMessage: String) : UiState()
     }
 }

@@ -38,6 +38,10 @@
 
     <!-- TODO: Messages -->
     <string name="msg_fields_required">All fields are required.</string>
+    <string name="msg_fail_add">Oops! Try again.</string>
+    <string name="msg_success_add">Item successfully created.</string>
+    <string name="msg_required_name">Name is required</string>
+    <string name="msg_required_due_date">Due date is required</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
