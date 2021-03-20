@@ -5,15 +5,15 @@ import androidx.paging.PagingSource
 import com.brunofelixdev.mytodoapp.data.db.DataResult
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemContract
+import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import javax.inject.Inject
 
 class ItemRepository @Inject constructor(
     private val dao: ItemDao
-) : ItemContract {
+) : ItemRepositoryContract {
 
     companion object {
-        private val TAG: String = ItemContract::class.java.simpleName
+        private val TAG: String = ItemRepositoryContract::class.java.simpleName
     }
 
     override suspend fun insert(item: Item): DataResult<Long> {

@@ -10,9 +10,9 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = DbSchema.TB_ITEMS)
 data class Item(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val name: String,
-    val isDone: Boolean,
-    val isImportant: Boolean,
-    val dueDate: String
+    val id: Int = 0,
+    var name: String = "",
+    var isDone: Boolean = false,
+    var isImportant: Boolean? = false,
+    var dueDate: String = ""
 ) : Parcelable

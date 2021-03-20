@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import com.brunofelixdev.mytodoapp.data.db.DataResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
-interface ItemContract {
+interface ItemRepositoryContract {
     suspend fun insert(item: Item): DataResult<Long>
     fun fetchAll(): PagingSource<Int, Item>
 }

@@ -7,7 +7,7 @@ import com.brunofelixdev.mytodoapp.data.db.AppDatabase
 import com.brunofelixdev.mytodoapp.data.db.DbSchema
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.repository.ItemRepository
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemContract
+import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +35,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideItemRepository(dao: ItemDao): ItemContract = ItemRepository(dao)
+    fun provideItemRepository(dao: ItemDao): ItemRepositoryContract = ItemRepository(dao)
 
     @Singleton
     @Provides

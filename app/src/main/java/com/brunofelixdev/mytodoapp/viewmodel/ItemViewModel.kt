@@ -4,22 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.brunofelixdev.mytodoapp.data.db.DataResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemContract
+import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
-    private val repository: ItemContract,
+    private val repository: ItemRepositoryContract,
     private val defaultDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -30,8 +28,32 @@ class ItemViewModel @Inject constructor(
         repository.fetchAll()
     }.flow.cachedIn(viewModelScope)
 
-    fun insertItem() {
+    val formErrors = mutableMapOf<String, String>()
 
+    companion object {
+        const val FIELD_NAME = "name"
+        const val FIELD_DUE_DATE = "dueDate"
+    }
+
+    fun insertItem(item: Item) {
+        viewModelScope.launch(defaultDispatcher) {
+            formValidation(item)
+
+            if (formErrors.isNotEmpty()) {
+                _uiStateFlow.value = UiState.Error("All fields are required.")
+            } else {
+                _uiStateFlow.value = UiState.Loading
+
+                when(repository.insert(item)) {
+                    is DataResult.Error -> {
+                        _uiStateFlow.value = UiState.Error("Oops! Try again.")
+                    }
+                    is DataResult.Success -> {
+                        _uiStateFlow.value = UiState.Success("Item successfully created..")
+                    }
+                }
+            }
+        }
     }
 
     fun updateItem(){
@@ -42,10 +64,21 @@ class ItemViewModel @Inject constructor(
 
     }
 
+    private fun formValidation(item: Item) {
+        formErrors.clear()
+
+        if (item.name.isEmpty()) {
+            formErrors[FIELD_NAME] = "Name is required"
+        }
+        if (item.dueDate.isEmpty() || item.dueDate.length < 10) {
+            formErrors[FIELD_DUE_DATE] = "Due date is required"
+        }
+    }
+
     sealed class UiState {
         object Initial: UiState()
         object Loading: UiState()
-        class Success(val items: Flow<PagingData<Item>>): UiState()
+        class Success(val successMessage: String): UiState()
         class Error(val errorMessage: String): UiState()
     }
 }
