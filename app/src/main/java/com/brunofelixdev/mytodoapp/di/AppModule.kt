@@ -2,12 +2,13 @@ package com.brunofelixdev.mytodoapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.brunofelixdev.mytodoapp.adapter.ItemAdapter
+import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.data.db.AppDatabase
 import com.brunofelixdev.mytodoapp.data.db.DbSchema
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.repository.ItemRepository
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.Module
 import dagger.Provides

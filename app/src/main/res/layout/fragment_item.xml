@@ -71,7 +71,8 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:contentDescription="@string/cd_add"
-        android:src="@drawable/ic_add"
-        app:elevation="8dp" />
+        app:elevation="8dp"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

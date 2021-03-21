@@ -16,6 +16,9 @@ interface ItemDao {
     @Delete
     suspend fun delete(item: Item)
 
+    @Query("UPDATE items SET isDone = 1 WHERE id = :id")
+    suspend fun checkAsDone(id: Int)
+
     @Query("SELECT * FROM items WHERE isDone == 0")
     fun fetchAll(): PagingSource<Int, Item>
 

@@ -1,9 +1,9 @@
-package com.brunofelixdev.mytodoapp.adapter
+package com.brunofelixdev.mytodoapp.rv.adapter
 
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import com.brunofelixdev.mytodoapp.adapter.viewholder.ItemLoadStateViewHolder
+import com.brunofelixdev.mytodoapp.rv.viewholder.ItemLoadStateViewHolder
 
 class ItemLoadStateAdapter(
     private val retry: () -> Unit

@@ -86,6 +86,8 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
         getDateTimeCalendar()
 
+        binding.tilDueDate.error = null
+
         binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
     }
 

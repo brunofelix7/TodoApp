@@ -1,4 +1,4 @@
-package com.brunofelixdev.mytodoapp.adapter.viewholder
+package com.brunofelixdev.mytodoapp.rv.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

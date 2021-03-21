@@ -6,5 +6,6 @@ import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
 interface ItemRepositoryContract {
     suspend fun insert(item: Item): DataResult<Long>
+    suspend fun checkAsDone(id: Int)
     fun fetchAll(): PagingSource<Int, Item>
 }

@@ -13,4 +13,12 @@
     <color name="light_blue_200">#FF81D4FA</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
+
+    <!-- Dark Mode colors -->
+    <color name="dark">#1F1F1F</color>
+    <color name="dark_bg">#121212</color>
+
+    <!-- Light Mode colors -->
+    <color name="light_bg">#FAFAFA</color>
+    <color name="light">#ffffff</color>
 </resources>

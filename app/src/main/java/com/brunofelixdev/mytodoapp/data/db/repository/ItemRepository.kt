@@ -31,5 +31,7 @@ class ItemRepository @Inject constructor(
         }
     }
 
+    override suspend fun checkAsDone(id: Int) = dao.checkAsDone(id)
+
     override fun fetchAll(): PagingSource<Int, Item> = dao.fetchAll()
 }

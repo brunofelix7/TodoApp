@@ -1,8 +1,9 @@
 package com.brunofelixdev.mytodoapp.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.CheckBox
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,10 +13,13 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.adapter.ItemAdapter
-import com.brunofelixdev.mytodoapp.adapter.ItemLoadStateAdapter
+import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
+import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
+import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
+import com.brunofelixdev.mytodoapp.rv.viewholder.ItemViewHolder
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -24,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ItemFragment : Fragment() {
+class ItemFragment : Fragment(), ItemClickListener {
 
     private var _binding: FragmentItemBinding? = null
     private val binding: FragmentItemBinding get() = _binding!!
@@ -83,6 +87,7 @@ class ItemFragment : Fragment() {
     }
 
     private fun initAdapter() {
+        adapter.listener = this
         binding.rvItems.adapter = adapter.withLoadStateHeaderAndFooter(
             header = ItemLoadStateAdapter { adapter.retry() },
             footer = ItemLoadStateAdapter { adapter.retry() }
@@ -109,5 +114,26 @@ class ItemFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
+    }
+
+    override fun onCheckedClick(item: Item, cbItem: CheckBox) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") { _, _ ->
+            viewModel.checkItemAsDone(item.id)
+        }
+        builder.setNegativeButton("No") {_, _ ->
+            cbItem.isChecked = false
+        }
+        builder.setOnDismissListener {
+            cbItem.isChecked = false
+        }
+        builder.setTitle("Mark as done?")
+        builder.setMessage("Are you sure you want to mark as done the item '${item.name}'?")
+        builder.create()
+        builder.show()
+    }
+
+    override fun onItemClick(item: Item) {
+        activity?.toast("Item clicked: ${item.name}")
     }
 }

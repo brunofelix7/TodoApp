@@ -67,6 +67,16 @@ class ItemViewModel @Inject constructor(
         }
     }
 
+    fun checkItemAsDone(id: Int) {
+        viewModelScope.launch(defaultDispatcher) {
+            _uiStateFlow.value = UiState.Loading
+
+            repository.checkAsDone(id)
+
+            _uiStateFlow.value = UiState.Success("")
+        }
+    }
+
     fun updateItem() {
 
     }
