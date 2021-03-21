@@ -13,6 +13,5 @@ data class Item(
     val id: Int = 0,
     var name: String = "",
     var isDone: Boolean = false,
-    var isImportant: Boolean? = false,
     var dueDate: String = ""
 ) : Parcelable

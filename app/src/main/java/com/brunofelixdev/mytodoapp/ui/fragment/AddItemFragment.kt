@@ -81,7 +81,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         this.year = year
 
         val pickedDay = if (dayOfMonth < 10) "0${this.day}" else dayOfMonth.toString()
-        val pickedMonth = if (month < 10) "0${this.month}" else month.toString()
+        val pickedMonth = if (month < 10) "0${this.month.plus(1)}" else month.plus(1).toString()
         val pickedYear = year.toString()
 
         getDateTimeCalendar()

@@ -6,6 +6,8 @@ import com.brunofelixdev.mytodoapp.data.db.DataResult
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.extension.parseToDate
+import com.brunofelixdev.mytodoapp.extension.parseToString
 import javax.inject.Inject
 
 class ItemRepository @Inject constructor(
@@ -18,6 +20,10 @@ class ItemRepository @Inject constructor(
 
     override suspend fun insert(item: Item): DataResult<Long> {
         return try {
+            val dueDate = item.dueDate
+            val date = item.dueDate.parseToDate()
+            item.dueDate = date?.parseToString() ?: dueDate
+
             val result = dao.insert(item)
 
             if (result > 0) {
