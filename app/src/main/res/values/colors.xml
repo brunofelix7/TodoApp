@@ -7,6 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="color_title">#a8a8a8</color>
+    <color name="light_grey">#E2E2E2</color>
     <color name="transparent">#00000000</color>
     <color name="red_500">#f44336</color>
     <color name="light_blue_50">#FFE1F5FE</color>
@@ -21,4 +23,8 @@
     <!-- Light Mode colors -->
     <color name="light_bg">#FAFAFA</color>
     <color name="light">#ffffff</color>
+
+    <!-- CoordinatorLayout -->
+    <color name="colorDark">#212121</color>
+    <color name="colorDarkSemiTransparent">#C6000000</color>
 </resources>

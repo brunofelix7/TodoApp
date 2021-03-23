@@ -19,6 +19,8 @@
     <string name="cd_ic_tag">Tag icon</string>
     <string name="cd_ic_calendar">Calendar icon</string>
     <string name="cd_btn_date_picker">Button date picker</string>
+    <string name="cd_bg_toolbar">Toolbar background</string>
+    <string name="cd_fab_edit">Float button edit</string>
 
     <!-- TODO: Fragments labels -->
     <string name="label_home">To do</string>
@@ -35,6 +37,9 @@
     <string name="txt_hint_item_name">Describe your task</string>
     <string name="label_due_date">Due date</string>
     <string name="txt_hint_due_date">dd/mm/yyyy</string>
+
+    <!-- TODO: ItemDetailsFragment -->
+    <string name="txt_btn_delete">Delete Item</string>
 
     <!-- TODO: Messages -->
     <string name="msg_fields_required">All fields are required.</string>

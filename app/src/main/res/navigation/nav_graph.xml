@@ -65,8 +65,8 @@
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="com.brunofelixdev.mytodoapp.ui.fragment.ItemDetailsFragment"
-        android:label="fragment_item_details"
-        tools:layout="@layout/fragment_item_details" >
+        android:label="Item details"
+        tools:layout="@layout/fragment_item_details">
         <action
             android:id="@+id/navigateToItem"
             app:destination="@id/itemFragment"

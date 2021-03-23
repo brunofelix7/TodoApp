@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,12 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
-import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
+import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
+import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
-import com.brunofelixdev.mytodoapp.rv.viewholder.ItemViewHolder
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -78,6 +78,8 @@ class ItemFragment : Fragment(), ItemClickListener {
     }
 
     private fun initViews() {
+        (activity as AppCompatActivity?)!!.supportActionBar?.show()
+
         binding.fab.setOnClickListener {
             val action = ItemFragmentDirections.navigateToAddItem()
             findNavController().navigate(action)
@@ -134,6 +136,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     }
 
     override fun onItemClick(item: Item) {
-        activity?.toast("Item clicked: ${item.name}")
+        val action = ItemFragmentDirections.navigateToItemDetails()
+        findNavController().navigate(action)
     }
 }
