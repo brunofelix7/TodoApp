@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemDetailsBinding
 import com.brunofelixdev.mytodoapp.extension.toast
@@ -16,6 +17,8 @@ class ItemDetailsFragment : Fragment() {
 
     private var _binding: FragmentItemDetailsBinding? = null
     private val binding: FragmentItemDetailsBinding get() = _binding!!
+
+    private val args: ItemDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,14 +33,18 @@ class ItemDetailsFragment : Fragment() {
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.hide()
 
+        val currentItem = args.currentItem
+
+        binding.tvName.text = currentItem.name
+        binding.tvDueDate.text = currentItem.dueDate
+
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(
             requireContext(),
             R.drawable.ic_arrow_back
         )
 
         binding.toolbar.setNavigationOnClickListener(View.OnClickListener {
-            val action = ItemDetailsFragmentDirections.navigateToItem()
-            findNavController().navigate(action)
+            activity?.onBackPressed()
         })
 
         binding.fabEdit.setOnClickListener {

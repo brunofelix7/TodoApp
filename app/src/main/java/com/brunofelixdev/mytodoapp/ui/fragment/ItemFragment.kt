@@ -136,7 +136,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     }
 
     override fun onItemClick(item: Item) {
-        val action = ItemFragmentDirections.navigateToItemDetails()
+        val action = ItemFragmentDirections.navigateToItemDetails(item)
         findNavController().navigate(action)
     }
 }

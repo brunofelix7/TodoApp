@@ -6,7 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.DataResult
+import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
@@ -49,14 +49,11 @@ class ItemViewModel @Inject constructor(
             } else {
                 _uiStateFlow.value = UiState.Loading
 
-                when (repository.insert(item)) {
-                    is DataResult.Error -> {
-                        _uiStateFlow.value =
-                            UiState.Error(
-                                resourcesProvider.getResources().getString(R.string.msg_fail_add)
-                            )
+                when (val result = repository.insert(item)) {
+                    is OperationResult.Error -> {
+                        _uiStateFlow.value = UiState.Error(result.message!!)
                     }
-                    is DataResult.Success -> {
+                    is OperationResult.Success -> {
                         _uiStateFlow.value =
                             UiState.Success(
                                 resourcesProvider.getResources().getString(R.string.msg_success_add)
@@ -71,28 +68,63 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch(defaultDispatcher) {
             _uiStateFlow.value = UiState.Loading
 
-            repository.checkAsDone(id)
-
-            _uiStateFlow.value = UiState.Success("")
+            when (val result = repository.checkAsDone(id)) {
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
+                }
+                is OperationResult.Success -> {
+                    _uiStateFlow.value = UiState.Success(
+                        resourcesProvider.getResources().getString(R.string.msg_success_check_as_done)
+                    )
+                }
+            }
         }
     }
 
-    fun updateItem() {
+    fun updateItem(item: Item) {
+        viewModelScope.launch(defaultDispatcher) {
+            _uiStateFlow.value = UiState.Loading
 
+            when (val result = repository.update(item)) {
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
+                }
+                is OperationResult.Success -> {
+                    _uiStateFlow.value = UiState.Success(
+                        resourcesProvider.getResources().getString(R.string.msg_success_update)
+                    )
+                }
+            }
+        }
     }
 
-    fun deleteItem() {
+    fun deleteItem(item: Item) {
+        viewModelScope.launch(defaultDispatcher) {
+            _uiStateFlow.value = UiState.Loading
 
+            when (val result = repository.delete(item)) {
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
+                }
+                is OperationResult.Success -> {
+                    _uiStateFlow.value = UiState.Success(
+                        resourcesProvider.getResources().getString(R.string.msg_success_delete)
+                    )
+                }
+            }
+        }
     }
 
     private fun formValidation(item: Item) {
         formErrors.clear()
 
         if (item.name.isEmpty()) {
-            formErrors[FIELD_NAME] = resourcesProvider.getResources().getString(R.string.msg_required_name)
+            formErrors[FIELD_NAME] =
+                resourcesProvider.getResources().getString(R.string.msg_required_name)
         }
         if (item.dueDate.isEmpty() || item.dueDate.length < 10) {
-            formErrors[FIELD_DUE_DATE] = resourcesProvider.getResources().getString(R.string.msg_required_due_date)
+            formErrors[FIELD_DUE_DATE] =
+                resourcesProvider.getResources().getString(R.string.msg_required_due_date)
         }
     }
 

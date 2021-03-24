@@ -2,7 +2,7 @@ package com.brunofelixdev.mytodoapp.data.db.repository
 
 import android.util.Log
 import androidx.paging.PagingSource
-import com.brunofelixdev.mytodoapp.data.db.DataResult
+import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
@@ -18,7 +18,7 @@ class ItemRepository @Inject constructor(
         private val TAG: String = ItemRepositoryContract::class.java.simpleName
     }
 
-    override suspend fun insert(item: Item): DataResult<Long> {
+    override suspend fun insert(item: Item): OperationResult<Long> {
         return try {
             val dueDate = item.dueDate
             val date = item.dueDate.parseToDate()
@@ -27,17 +27,45 @@ class ItemRepository @Inject constructor(
             val result = dao.insert(item)
 
             if (result > 0) {
-                DataResult.Success(result)
+                OperationResult.Success(result)
             } else {
-                DataResult.Error("Oops! Try again.")
+                OperationResult.Error("Oops! Try again.")
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.message ?: "An error occurred while entering the data.")
-            DataResult.Error(e.message ?: "An error occurred while entering the data.")
+            Log.e(TAG, e.message ?: "Oops! Try again.")
+            OperationResult.Error(e.message ?: "Oops! Try again.")
         }
     }
 
-    override suspend fun checkAsDone(id: Int) = dao.checkAsDone(id)
+    override suspend fun update(item: Item): OperationResult<Unit> {
+        return try {
+            dao.update(item)
+            OperationResult.Success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Oops! Try again.")
+            OperationResult.Error(e.message ?: "Oops! Try again.")
+        }
+    }
+
+    override suspend fun delete(item: Item): OperationResult<Unit> {
+        return try {
+            dao.delete(item)
+            OperationResult.Success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Oops! Try again.")
+            OperationResult.Error(e.message ?: "Oops! Try again.")
+        }
+    }
+
+    override suspend fun checkAsDone(id: Int): OperationResult<Unit> {
+        return try {
+            dao.checkAsDone(id)
+            OperationResult.Success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Oops! Try again.")
+            OperationResult.Error(e.message ?: "Oops! Try again.")
+        }
+    }
 
     override fun fetchAll(): PagingSource<Int, Item> = dao.fetchAll()
 }
