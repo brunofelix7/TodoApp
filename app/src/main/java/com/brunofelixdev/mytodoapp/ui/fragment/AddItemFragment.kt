@@ -56,7 +56,6 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onDestroyView() {
         uiStateJob?.cancel()
-        activity?.hideKeyboard()
         super.onDestroyView()
     }
 
@@ -109,7 +108,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun collectData() {
-        uiStateJob = lifecycleScope.launch {
+        uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
                 when(uiState) {
                     is ItemViewModel.UiState.Loading -> {
@@ -117,6 +116,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         binding.progressBar.isVisible = true
                     }
                     is ItemViewModel.UiState.Success -> {
+                        activity?.hideKeyboard()
                         binding.progressBar.isVisible = false
                         activity?.toast(uiState.successMessage)
                         val action = AddItemFragmentDirections.navigateToItem()

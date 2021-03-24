@@ -39,6 +39,8 @@ class ItemViewModel @Inject constructor(
     }
 
     fun insertItem(item: Item) {
+        _uiStateFlow.value = UiState.Loading
+
         viewModelScope.launch(defaultDispatcher) {
             formValidation(item)
 
@@ -47,8 +49,6 @@ class ItemViewModel @Inject constructor(
                     resourcesProvider.getResources().getString(R.string.msg_fields_required)
                 )
             } else {
-                _uiStateFlow.value = UiState.Loading
-
                 when (val result = repository.insert(item)) {
                     is OperationResult.Error -> {
                         _uiStateFlow.value = UiState.Error(result.message!!)
@@ -65,9 +65,9 @@ class ItemViewModel @Inject constructor(
     }
 
     fun checkItemAsDone(id: Int) {
-        viewModelScope.launch(defaultDispatcher) {
-            _uiStateFlow.value = UiState.Loading
+        _uiStateFlow.value = UiState.Loading
 
+        viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.checkAsDone(id)) {
                 is OperationResult.Error -> {
                     _uiStateFlow.value = UiState.Error(result.message!!)
@@ -82,9 +82,9 @@ class ItemViewModel @Inject constructor(
     }
 
     fun updateItem(item: Item) {
-        viewModelScope.launch(defaultDispatcher) {
-            _uiStateFlow.value = UiState.Loading
+        _uiStateFlow.value = UiState.Loading
 
+        viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.update(item)) {
                 is OperationResult.Error -> {
                     _uiStateFlow.value = UiState.Error(result.message!!)
@@ -99,9 +99,9 @@ class ItemViewModel @Inject constructor(
     }
 
     fun deleteItem(item: Item) {
-        viewModelScope.launch(defaultDispatcher) {
-            _uiStateFlow.value = UiState.Loading
+        _uiStateFlow.value = UiState.Loading
 
+        viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.delete(item)) {
                 is OperationResult.Error -> {
                     _uiStateFlow.value = UiState.Error(result.message!!)

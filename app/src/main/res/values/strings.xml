@@ -47,7 +47,7 @@
     <string name="msg_success_add">Item successfully created.</string>
     <string name="msg_success_update">Atualizado com sucesso.</string>
     <string name="msg_success_delete">Successfully deleted.</string>
-    <string name="msg_success_check_as_done">Feito com sucesso.</string>
+    <string name="msg_success_check_as_done">Item successfully done.</string>
     <string name="msg_required_name">Name is required</string>
     <string name="msg_required_due_date">Due date is required</string>
 
