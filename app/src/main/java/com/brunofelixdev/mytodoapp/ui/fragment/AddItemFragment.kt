@@ -5,11 +5,13 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentAddItemBinding
@@ -28,6 +30,10 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var _binding: FragmentAddItemBinding? = null
     private val binding: FragmentAddItemBinding get() = _binding!!
+
+    private val args: AddItemFragmentArgs by navArgs()
+
+    private val currentItem get() = args.currentItem
 
     private val viewModel: ItemViewModel by viewModels()
 
@@ -56,7 +62,18 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onDestroyView() {
         uiStateJob?.cancel()
+        activity?.hideKeyboard()
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //  If the user changes the theme when this screen is open.
+        if (currentItem != null) {
+            (activity as AppCompatActivity?)!!.supportActionBar?.title =
+                resources.getString(R.string.label_edit_item)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -91,7 +108,16 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun initViews() {
+        (activity as AppCompatActivity?)!!.supportActionBar?.show()
+
         binding.etDueDate.myCustomMask(CALENDAR_MASK)
+
+        if (currentItem != null) {
+            (activity as AppCompatActivity?)!!.supportActionBar?.title =
+                resources.getString(R.string.label_edit_item)
+            binding.etName.setText(currentItem?.name)
+        }
+
         binding.btnDatePicker.setOnClickListener {
             getDateTimeCalendar()
 
@@ -119,8 +145,14 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         activity?.hideKeyboard()
                         binding.progressBar.isVisible = false
                         activity?.toast(uiState.successMessage)
-                        val action = AddItemFragmentDirections.navigateToItem()
-                        findNavController().navigate(action)
+
+                        if (currentItem != null) {
+                            val action = AddItemFragmentDirections.navigateToItemDetails(currentItem!!)
+                            findNavController().navigate(action)
+                        } else {
+                            val action = AddItemFragmentDirections.navigateToItem()
+                            findNavController().navigate(action)
+                        }
                     }
                     is ItemViewModel.UiState.Error -> {
                         binding.progressBar.isVisible = false
@@ -137,7 +169,13 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             name = binding.etName.text.toString()
             dueDate = binding.etDueDate.text.toString()
         }
-        viewModel.insertItem(item)
+        if (currentItem != null) {
+            currentItem?.name = item.name
+            currentItem?.dueDate = item.dueDate
+            viewModel.updateItem(currentItem!!)
+        } else {
+            viewModel.insertItem(item)
+        }
     }
 
     private fun checkFormErrors() {

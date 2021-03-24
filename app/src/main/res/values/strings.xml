@@ -25,8 +25,8 @@
     <!-- TODO: Fragments labels -->
     <string name="label_home">To do</string>
     <string name="label_settings">@string/title_settings</string>
-    <string name="label_add_item">New task</string>
-    <string name="label_edit_item">Update item</string>
+    <string name="label_add_item">Create new task</string>
+    <string name="label_edit_item">Edit task</string>
 
     <!-- TODO: ItemFragment -->
     <string name="txt_btn_retry">Retry</string>
@@ -45,8 +45,8 @@
     <string name="msg_fields_required">All fields are required.</string>
     <string name="msg_fail_add">Oops! Try again.</string>
     <string name="msg_success_add">Item successfully created.</string>
-    <string name="msg_success_update">Atualizado com sucesso.</string>
-    <string name="msg_success_delete">Successfully deleted.</string>
+    <string name="msg_success_update">Item successfully updated.</string>
+    <string name="msg_success_delete">Item successfully deleted.</string>
     <string name="msg_success_check_as_done">Item successfully done.</string>
     <string name="msg_required_name">Name is required</string>
     <string name="msg_required_due_date">Due date is required</string>

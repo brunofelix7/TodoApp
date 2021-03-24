@@ -51,6 +51,13 @@ class ItemDetailsFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        //  If the user changes the theme when this screen is open.
+        (activity as AppCompatActivity?)!!.supportActionBar?.hide()
+    }
+
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.hide()
 
@@ -69,7 +76,7 @@ class ItemDetailsFragment : Fragment() {
         })
 
         binding.fabEdit.setOnClickListener {
-            activity?.toast("Edit task...")
+            updateItem(currentItem)
         }
 
         binding.btnDelete.setOnClickListener {
@@ -99,6 +106,11 @@ class ItemDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateItem(item: Item) {
+        val action = ItemDetailsFragmentDirections.navigateToAddItem(item)
+        findNavController().navigate(action)
     }
 
     private fun deleteItem(item: Item) {
