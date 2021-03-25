@@ -2,9 +2,11 @@ package com.brunofelixdev.mytodoapp.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,9 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentAddItemBinding
-import com.brunofelixdev.mytodoapp.extension.hideKeyboard
-import com.brunofelixdev.mytodoapp.extension.myCustomMask
-import com.brunofelixdev.mytodoapp.extension.toast
+import com.brunofelixdev.mytodoapp.extension.*
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -26,7 +26,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
+class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private var _binding: FragmentAddItemBinding? = null
     private val binding: FragmentAddItemBinding get() = _binding!!
@@ -42,10 +43,13 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private var day: Int = 0
     private var month: Int = 0
     private var year: Int = 0
+    private var hour: Int = 0
+    private var minute: Int = 0
 
     companion object {
         private val TAG = AddItemFragment::class.java.simpleName
         private const val CALENDAR_MASK = "##/##/####"
+        private const val CLOCK_MASK = "##:##"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +57,11 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentAddItemBinding.inflate(inflater, container, false)
         initViews()
         collectData()
@@ -107,10 +115,23 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        this.hour = hourOfDay
+        this.minute = minute
+
+        val pickedHour = if (hourOfDay < 10) "0${this.hour}" else hourOfDay.toString()
+        val pickedMinute = if (minute < 10) "0${this.minute}" else minute.toString()
+
+        binding.tilDueTime.error = null
+        binding.etDueTime.setText("${pickedHour}:${pickedMinute}")
+    }
+
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
         binding.etDueDate.myCustomMask(CALENDAR_MASK)
+        binding.etDueTime.myCustomMask(CLOCK_MASK)
 
         if (currentItem != null) {
             (activity as AppCompatActivity?)!!.supportActionBar?.title =
@@ -120,8 +141,12 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
         binding.btnDatePicker.setOnClickListener {
             getDateTimeCalendar()
-
             DatePickerDialog(requireContext(), this, year, month, day).show()
+        }
+
+        binding.btnTimePicker.setOnClickListener {
+            getDateTimeCalendar()
+            TimePickerDialog(requireContext(), this, hour, minute, true).show()
         }
     }
 
@@ -131,12 +156,14 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         this.day = now.get(Calendar.DAY_OF_MONTH)
         this.month = now.get(Calendar.MONTH)
         this.year = now.get(Calendar.YEAR)
+        this.hour = now.get(Calendar.HOUR)
+        this.minute = now.get(Calendar.MINUTE)
     }
 
     private fun collectData() {
         uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
-                when(uiState) {
+                when (uiState) {
                     is ItemViewModel.UiState.Loading -> {
                         clearFormErrors()
                         binding.progressBar.isVisible = true
@@ -147,7 +174,8 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         activity?.toast(uiState.successMessage)
 
                         if (currentItem != null) {
-                            val action = AddItemFragmentDirections.navigateToItemDetails(currentItem!!)
+                            val action =
+                                AddItemFragmentDirections.navigateToItemDetails(currentItem!!)
                             findNavController().navigate(action)
                         } else {
                             val action = AddItemFragmentDirections.navigateToItem()
@@ -168,10 +196,13 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val item = Item().apply {
             name = binding.etName.text.toString()
             dueDate = binding.etDueDate.text.toString()
+            dueTime = binding.etDueTime.text.toString()
+            dueDateTime = 0
         }
         if (currentItem != null) {
             currentItem?.name = item.name
             currentItem?.dueDate = item.dueDate
+            currentItem?.dueTime = item.dueTime
             viewModel.updateItem(currentItem!!)
         } else {
             viewModel.insertItem(item)
@@ -187,11 +218,15 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             if (key == ItemViewModel.FIELD_DUE_DATE) {
                 binding.tilDueDate.error = value
             }
+            if (key == ItemViewModel.FIELD_DUE_TIME) {
+                binding.tilDueTime.error = value
+            }
         }
     }
 
     private fun clearFormErrors() {
         binding.tilName.error = null
         binding.tilDueDate.error = null
+        binding.tilDueTime.error = null
     }
 }

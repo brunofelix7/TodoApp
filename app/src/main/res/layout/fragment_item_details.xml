@@ -76,6 +76,17 @@
                 app:layout_constraintStart_toStartOf="@+id/tag_layout"
                 app:layout_constraintTop_toBottomOf="@+id/tag_layout" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="16dp"
+                android:background="@color/light_grey"
+                app:layout_constraintBottom_toTopOf="@+id/clock_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tag_layout"
+                app:layout_constraintTop_toBottomOf="@+id/calendar_layout" />
+
             <ImageView
                 android:id="@+id/iv_tag"
                 android:layout_width="28dp"
@@ -180,6 +191,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/ic_clock"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:contentDescription="@string/cd_ic_clock"
+                android:src="@drawable/ic_clock"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_calendar" />
+
+            <LinearLayout
+                android:id="@+id/clock_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/ic_clock"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ic_clock"
+                app:layout_constraintTop_toTopOf="@+id/ic_clock">
+
+                <TextView
+                    android:id="@+id/tv_title_due_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_due_time"
+                    android:textColor="@color/color_title"
+                    android:textSize="12sp" />
+
+                <com.brunofelixdev.mytodoapp.ui.custom.TextViewCustom
+                    android:id="@+id/tv_due_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="17:30" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

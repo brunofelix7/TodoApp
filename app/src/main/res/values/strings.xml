@@ -18,7 +18,9 @@
     <string name="cd_add">Add icon</string>
     <string name="cd_ic_tag">Tag icon</string>
     <string name="cd_ic_calendar">Calendar icon</string>
+    <string name="cd_ic_clock">Clock icon</string>
     <string name="cd_btn_date_picker">Button date picker</string>
+    <string name="cd_btn_time_picker">Button time picker</string>
     <string name="cd_bg_toolbar">Toolbar background</string>
     <string name="cd_fab_edit">Float button edit</string>
 
@@ -36,7 +38,9 @@
     <string name="label_item_name">Item</string>
     <string name="txt_hint_item_name">Describe your task</string>
     <string name="label_due_date">Due date</string>
+    <string name="label_due_time">Due time</string>
     <string name="txt_hint_due_date">dd/mm/yyyy</string>
+    <string name="txt_hint_due_time">HH:mm</string>
 
     <!-- TODO: ItemDetailsFragment -->
     <string name="txt_btn_delete">Delete Item</string>
@@ -50,6 +54,7 @@
     <string name="msg_success_check_as_done">Item successfully done.</string>
     <string name="msg_required_name">Name is required</string>
     <string name="msg_required_due_date">Due date is required</string>
+    <string name="msg_required_due_time">Due time is required</string>
 
     <!-- TODO: Notification channel -->
     <string name="channel_name">Notification channel name</string>

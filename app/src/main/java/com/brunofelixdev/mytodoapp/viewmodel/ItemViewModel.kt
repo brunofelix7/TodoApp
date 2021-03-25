@@ -36,6 +36,7 @@ class ItemViewModel @Inject constructor(
     companion object {
         const val FIELD_NAME = "name"
         const val FIELD_DUE_DATE = "dueDate"
+        const val FIELD_DUE_TIME = "dueTime"
     }
 
     fun insertItem(item: Item) {
@@ -125,6 +126,10 @@ class ItemViewModel @Inject constructor(
         if (item.dueDate.isEmpty() || item.dueDate.length < 10) {
             formErrors[FIELD_DUE_DATE] =
                 resourcesProvider.getResources().getString(R.string.msg_required_due_date)
+        }
+        if (item.dueTime.isEmpty() || item.dueTime.length < 5) {
+            formErrors[FIELD_DUE_TIME] =
+                resourcesProvider.getResources().getString(R.string.msg_required_due_time)
         }
     }
 

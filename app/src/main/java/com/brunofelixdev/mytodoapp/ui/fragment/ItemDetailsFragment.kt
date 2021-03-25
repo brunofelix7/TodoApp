@@ -65,6 +65,7 @@ class ItemDetailsFragment : Fragment() {
 
         binding.tvName.text = currentItem.name
         binding.tvDueDate.text = currentItem.dueDate
+        binding.tvDueTime.text = currentItem.dueTime
 
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(
             requireContext(),

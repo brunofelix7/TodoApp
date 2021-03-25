@@ -70,6 +70,45 @@
         app:layout_constraintStart_toEndOf="@+id/til_due_date"
         app:layout_constraintTop_toTopOf="@+id/til_due_date" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_due_time"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/label_due_time"
+        app:errorEnabled="true"
+        app:expandedHintEnabled="false"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_due_date"
+        app:startIconContentDescription="@string/cd_ic_calendar"
+        app:startIconDrawable="@drawable/ic_clock">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_due_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/txt_hint_due_time"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/btn_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_btn_custom"
+        android:contentDescription="@string/cd_btn_time_picker"
+        android:elevation="8dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_clock"
+        android:tint="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/til_due_time"
+        app:layout_constraintTop_toTopOf="@+id/til_due_time" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -87,6 +126,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_due_date" />
+        app:layout_constraintTop_toBottomOf="@+id/til_due_time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
