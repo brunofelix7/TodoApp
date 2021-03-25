@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.databinding.ActivityMainBinding
+import com.brunofelixdev.mytodoapp.extension.createNotificationChannel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MyToDoApp)
         initializeViews()
+        createNotificationChannel()
     }
 
     private fun initializeViews() {
