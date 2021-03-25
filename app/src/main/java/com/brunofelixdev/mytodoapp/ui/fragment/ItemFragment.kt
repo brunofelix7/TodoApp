@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
-import com.brunofelixdev.mytodoapp.extension.sendNotification
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
