@@ -8,6 +8,8 @@ import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import com.brunofelixdev.mytodoapp.extension.parseToDate
 import com.brunofelixdev.mytodoapp.extension.parseToString
+import org.joda.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 
 class ItemRepository @Inject constructor(
@@ -21,8 +23,16 @@ class ItemRepository @Inject constructor(
     override suspend fun insert(item: Item): OperationResult<Long> {
         return try {
             val dueDate = item.dueDate
-            val date = item.dueDate.parseToDate()
-            item.dueDate = date?.parseToString() ?: dueDate
+            val dueDateResult = item.dueDate.parseToDate()
+            item.dueDate = dueDateResult?.parseToString() ?: dueDate
+            item.workTag = UUID.randomUUID().toString()
+
+            val dueDateTime = "$dueDate ${item.dueTime}"
+            val date = dueDateTime.parseToDate(pattern = "dd/MM/yyyy HH:mm")
+            val now = LocalDateTime.now()
+            val scheduleDate = LocalDateTime(date)
+
+            item.workDuration = (scheduleDate.minuteOfHour - now.minuteOfHour)
 
             val result = dao.insert(item)
 
@@ -57,9 +67,9 @@ class ItemRepository @Inject constructor(
         }
     }
 
-    override suspend fun checkAsDone(id: Int): OperationResult<Unit> {
+    override suspend fun checkAsDone(item: Item): OperationResult<Unit> {
         return try {
-            dao.checkAsDone(id)
+            dao.checkAsDone(item.id)
             OperationResult.Success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, e.message ?: "Oops! Try again.")

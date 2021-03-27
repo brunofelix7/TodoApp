@@ -5,12 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.util.Constants
-import com.brunofelixdev.mytodoapp.worker.ItemWorker
-import java.util.concurrent.TimeUnit
 
 fun Application.createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -24,13 +20,4 @@ fun Application.createNotificationChannel() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
-}
-
-fun Application.initWorker() {
-    val myWorker = PeriodicWorkRequestBuilder<ItemWorker>(15, TimeUnit.MINUTES).build()
-    WorkManager.getInstance(this).enqueue(myWorker)
-}
-
-fun Application.cancelWorker() {
-    WorkManager.getInstance(this).cancelAllWork()
 }

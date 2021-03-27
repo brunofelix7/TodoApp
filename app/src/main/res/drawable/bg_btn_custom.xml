@@ -4,7 +4,8 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="4dp" />
-            <solid android:color="@color/purple_200" />
+            <stroke android:width="2dip" android:color="@color/purple_500" />
+            <solid android:color="@color/light_grey" />
         </shape>
     </item>
 
@@ -12,7 +13,8 @@
     <item android:state_focused="true">
         <shape>
             <corners android:radius="4dp" />
-            <solid android:color="@color/purple_500" />
+            <stroke android:width="2dip" android:color="@color/purple_500" />
+            <solid android:color="@color/light_grey" />
         </shape>
     </item>
 
@@ -20,7 +22,8 @@
     <item>
         <shape>
             <corners android:radius="4dp" />
-            <solid android:color="@color/purple_500" />
+            <stroke android:width="2dip" android:color="@color/purple_500" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </selector>

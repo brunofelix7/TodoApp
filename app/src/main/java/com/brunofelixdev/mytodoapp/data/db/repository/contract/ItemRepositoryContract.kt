@@ -8,6 +8,6 @@ interface ItemRepositoryContract {
     suspend fun insert(item: Item): OperationResult<Long>
     suspend fun update(item: Item): OperationResult<Unit>
     suspend fun delete(item: Item): OperationResult<Unit>
-    suspend fun checkAsDone(id: Int): OperationResult<Unit>
+    suspend fun checkAsDone(item: Item): OperationResult<Unit>
     fun fetchAll(): PagingSource<Int, Item>
 }

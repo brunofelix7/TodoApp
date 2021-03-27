@@ -9,6 +9,8 @@ import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.extension.cancelWork
+import com.brunofelixdev.mytodoapp.extension.createWork
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -55,6 +57,12 @@ class ItemViewModel @Inject constructor(
                         _uiStateFlow.value = UiState.Error(result.message!!)
                     }
                     is OperationResult.Success -> {
+                        resourcesProvider.getApplicationContext().createWork(
+                            item.workTag,
+                            result.data.toString().toInt(),
+                            item.workDuration.toLong()
+                        )
+
                         _uiStateFlow.value =
                             UiState.Success(
                                 resourcesProvider.getResources().getString(R.string.msg_success_add)
@@ -65,18 +73,20 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun checkItemAsDone(id: Int) {
+    fun checkItemAsDone(item: Item) {
         _uiStateFlow.value = UiState.Loading
 
         viewModelScope.launch(defaultDispatcher) {
-            when (val result = repository.checkAsDone(id)) {
-                is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
-                }
+            when (val result = repository.checkAsDone(item)) {
                 is OperationResult.Success -> {
+                    resourcesProvider.getApplicationContext().cancelWork(item.workTag)
+
                     _uiStateFlow.value = UiState.Success(
                         resourcesProvider.getResources().getString(R.string.msg_success_check_as_done)
                     )
+                }
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
                 }
             }
         }
@@ -87,13 +97,13 @@ class ItemViewModel @Inject constructor(
 
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.update(item)) {
-                is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
-                }
                 is OperationResult.Success -> {
                     _uiStateFlow.value = UiState.Success(
                         resourcesProvider.getResources().getString(R.string.msg_success_update)
                     )
+                }
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
                 }
             }
         }
@@ -104,13 +114,15 @@ class ItemViewModel @Inject constructor(
 
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.delete(item)) {
-                is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
-                }
                 is OperationResult.Success -> {
+                    resourcesProvider.getApplicationContext().cancelWork(item.workTag)
+
                     _uiStateFlow.value = UiState.Success(
                         resourcesProvider.getResources().getString(R.string.msg_success_delete)
                     )
+                }
+                is OperationResult.Error -> {
+                    _uiStateFlow.value = UiState.Error(result.message!!)
                 }
             }
         }

@@ -121,7 +121,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     override fun onCheckedClick(item: Item, cbItem: CheckBox) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            viewModel.checkItemAsDone(item.id)
+            viewModel.checkItemAsDone(item)
         }
         builder.setNegativeButton("No") {_, _ ->
             cbItem.isChecked = false

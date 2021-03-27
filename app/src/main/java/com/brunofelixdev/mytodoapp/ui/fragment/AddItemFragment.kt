@@ -110,6 +110,8 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         getDateTimeCalendar()
 
+        TimePickerDialog(requireContext(), this, hour, minute, true).show()
+
         binding.tilDueDate.error = null
 
         binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
@@ -197,7 +199,6 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             name = binding.etName.text.toString()
             dueDate = binding.etDueDate.text.toString()
             dueTime = binding.etDueTime.text.toString()
-            dueDateTime = 0
         }
         if (currentItem != null) {
             currentItem?.name = item.name

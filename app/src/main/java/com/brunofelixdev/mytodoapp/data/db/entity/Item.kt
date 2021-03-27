@@ -13,10 +13,8 @@ data class Item(
     val id: Int = 0,
     var name: String = "",
     var isDone: Boolean = false,
-    var dueDateTime: Int = 0,
     var dueDate: String = "",
-    var dueTime: String = ""
-) : Parcelable {
-
-}
-
+    var dueTime: String = "",
+    var workTag: String = "",
+    var workDuration: Int = 0
+) : Parcelable
