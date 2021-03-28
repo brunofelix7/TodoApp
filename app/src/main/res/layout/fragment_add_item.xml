@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_name"
         app:startIconContentDescription="@string/cd_ic_calendar"
-        app:startIconDrawable="@drawable/ic_calendar_blank">
+        app:startIconDrawable="@drawable/ic_calendar">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_due_date"

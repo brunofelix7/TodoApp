@@ -8,7 +8,10 @@ import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import com.brunofelixdev.mytodoapp.extension.parseToDate
 import com.brunofelixdev.mytodoapp.extension.parseToString
+import org.joda.time.DateTime
+import org.joda.time.Duration
 import org.joda.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.inject.Inject
 
@@ -25,14 +28,14 @@ class ItemRepository @Inject constructor(
             val dueDate = item.dueDate
             val dueDateResult = item.dueDate.parseToDate()
             item.dueDate = dueDateResult?.parseToString() ?: dueDate
-            item.workTag = UUID.randomUUID().toString()
+            item.workTag = "tag-${UUID.randomUUID()}"
 
             val dueDateTime = "$dueDate ${item.dueTime}"
-            val date = dueDateTime.parseToDate(pattern = "dd/MM/yyyy HH:mm")
-            val now = LocalDateTime.now()
-            val scheduleDate = LocalDateTime(date)
+            val from = DateTime.now()
+            val to = DateTime(dueDateTime.parseToDate(pattern = "dd/MM/yyyy HH:mm"))
+            val duration = Duration(from, to)
 
-            item.workDuration = (scheduleDate.minuteOfHour - now.minuteOfHour)
+            item.workDuration = duration.standardMinutes.toInt()
 
             val result = dao.insert(item)
 
@@ -78,4 +81,5 @@ class ItemRepository @Inject constructor(
     }
 
     override fun fetchAll(): PagingSource<Int, Item> = dao.fetchAll()
+
 }

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class ResourceProvider @Inject constructor(private val context: Context) {
 
-    fun getResources(): Resources = this.context.resources
+    fun getResources(): Resources = context.resources
 
     fun getApplicationContext(): Context = context.applicationContext
 }

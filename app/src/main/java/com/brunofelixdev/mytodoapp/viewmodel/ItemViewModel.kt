@@ -57,11 +57,7 @@ class ItemViewModel @Inject constructor(
                         _uiStateFlow.value = UiState.Error(result.message!!)
                     }
                     is OperationResult.Success -> {
-                        resourcesProvider.getApplicationContext().createWork(
-                            item.workTag,
-                            result.data.toString().toInt(),
-                            item.workDuration.toLong()
-                        )
+                        resourcesProvider.getApplicationContext().createWork(item, result.data!!)
 
                         _uiStateFlow.value =
                             UiState.Success(

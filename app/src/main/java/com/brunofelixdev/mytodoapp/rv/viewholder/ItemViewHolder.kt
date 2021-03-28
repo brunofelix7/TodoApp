@@ -14,7 +14,7 @@ class ItemViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun bind(item: Item) {
         binding.tvName.text = item.name
-        binding.tvDueDate.text = "${item.dueDate} - ${item.dueTime}"
+        binding.tvDueDate.text = "${item.dueTime} - ${item.dueDate}"
         binding.itemLayout.setOnClickListener {
             listener?.onItemClick(item)
         }

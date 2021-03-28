@@ -142,11 +142,13 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         }
 
         binding.btnDatePicker.setOnClickListener {
+            activity?.hideKeyboard()
             getDateTimeCalendar()
             DatePickerDialog(requireContext(), this, year, month, day).show()
         }
 
         binding.btnTimePicker.setOnClickListener {
+            activity?.hideKeyboard()
             getDateTimeCalendar()
             TimePickerDialog(requireContext(), this, hour, minute, true).show()
         }

@@ -10,18 +10,17 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.brunofelixdev.mytodoapp.R
+import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
 import com.brunofelixdev.mytodoapp.util.Constants
-import com.brunofelixdev.mytodoapp.worker.ItemNotifyWorker
+import com.brunofelixdev.mytodoapp.worker.ItemWorker
 import java.util.concurrent.TimeUnit
 
-fun Context.sendNotification(title: String, description: String, notificationId: Int) {
+fun Context.sendNotification(title: String, description: String, notificationId: Long) {
     val intent = Intent(this, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
     val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-    //  val bitmapLargeIcon = BitmapFactory.decodeResource(resources, R.mipmap.large_icon)
 
     val builder = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_small_icon)
@@ -33,15 +32,21 @@ fun Context.sendNotification(title: String, description: String, notificationId:
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
     with(NotificationManagerCompat.from(this)) {
-        notify(notificationId, builder.build())
+        notify(notificationId.toInt(), builder.build())
     }
 }
 
-fun Context.createWork(workTag: String, workId: Int, duration: Long) {
-    val inputData = Data.Builder().putInt(workTag, workId).build()
-    val notificationWork = OneTimeWorkRequest.Builder(ItemNotifyWorker::class.java)
-        .setInitialDelay(duration, TimeUnit.MINUTES)
-        .setInputData(inputData)
+fun Context.createWork(item: Item, notificationId: Long) {
+    val inputData = Data.Builder().apply {
+        putLong(ItemWorker.KEY_ID, notificationId)
+        putString(ItemWorker.KEY_NAME, item.name)
+        putString(ItemWorker.KEY_DUE_DATE, "${item.dueTime} - ${item.dueDate}")
+    }
+
+    val notificationWork = OneTimeWorkRequest.Builder(ItemWorker::class.java)
+        .setInitialDelay(item.workDuration.toLong(), TimeUnit.MINUTES)
+        .setInputData(inputData.build())
+        .addTag(item.workTag)
         .build()
     WorkManager.getInstance(this).enqueue(notificationWork)
 }

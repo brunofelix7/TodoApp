@@ -21,7 +21,7 @@
             app:expandedTitleMarginBottom="20dp"
             app:expandedTitleMarginStart="15dp"
             app:layout_scrollFlags="noScroll|exitUntilCollapsed|snap"
-            app:title="Task details">
+            app:title="Item details">
 
             <ImageView
                 android:id="@+id/bg_toolbar"

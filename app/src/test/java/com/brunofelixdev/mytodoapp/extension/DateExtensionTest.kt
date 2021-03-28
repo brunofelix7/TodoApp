@@ -1,6 +1,8 @@
 package com.brunofelixdev.mytodoapp.extension
 
 import com.google.common.truth.Truth.assertThat
+import org.joda.time.DateTime
+import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.junit.Test
 
@@ -8,12 +10,11 @@ class DateExtensionTest {
 
     @Test
     fun testConvert() {
-        val dueDateFromUser = "26/03/2021 17:40"
-        val date = dueDateFromUser.parseToDate(pattern = "dd/MM/yyyy HH:mm")
-        val now = LocalDateTime.now()
-        val scheduleDate = LocalDateTime(date)
-
-        val result = (scheduleDate.minuteOfHour - now.minuteOfHour)
+        val dueDateFromUser = "28/03/2021 21:00"
+        val from = DateTime.now()
+        val to = DateTime(dueDateFromUser.parseToDate(pattern = "dd/MM/yyyy HH:mm"))
+        val duration = Duration(from, to)
+        val result = duration.standardMinutes
 
         assertThat(result).isNotNull()
     }
