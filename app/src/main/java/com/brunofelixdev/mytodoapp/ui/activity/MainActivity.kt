@@ -10,6 +10,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.databinding.ActivityMainBinding
+import com.brunofelixdev.mytodoapp.ui.fragment.ItemFragmentDirections
+import com.brunofelixdev.mytodoapp.ui.widget.AppWidget
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,13 +26,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MyToDoApp)
-        initializeViews()
+        initViews()
     }
 
-    private fun initializeViews() {
+    private fun initViews() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         drawerMenuSetup()
+
+        val extras = intent.getStringExtra(AppWidget.KEY_WIDGET)
+        if (extras != null) {
+            val action = ItemFragmentDirections.navigateToAddItem(null)
+            navController = findNavController(R.id.fragment)
+            navController.navigate(action)
+        }
     }
 
     private fun drawerMenuSetup() {

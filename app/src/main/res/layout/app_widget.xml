@@ -1,21 +1,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/appWidgetBackgroundColor"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_btn_custom"
+    android:clickable="true"
+    android:focusable="true"
     android:padding="@dimen/widget_margin"
     android:theme="@style/ThemeOverlay.MyToDoApp.AppWidgetContainer">
 
-    <TextView
-        android:id="@+id/appwidget_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="?attr/appWidgetBackgroundColor"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="?attr/appWidgetTextColor"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:text="@string/label_new_task"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_500"
+            android:contentDescription="@string/cd_add"
+            android:src="@drawable/ic_add"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
 </RelativeLayout>

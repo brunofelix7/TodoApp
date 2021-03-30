@@ -10,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
+
+        <!-- Widget -->
         <receiver android:name=".ui.widget.AppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -20,7 +22,8 @@
                 android:resource="@xml/app_widget_info" />
         </receiver>
 
-        <activity android:name=".ui.activity.MainActivity">
+        <!-- Activities -->
+        <activity android:name=".ui.activity.MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
