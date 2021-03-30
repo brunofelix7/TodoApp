@@ -23,6 +23,7 @@
     <string name="cd_btn_time_picker">Button time picker</string>
     <string name="cd_bg_toolbar">Toolbar background</string>
     <string name="cd_fab_edit">Float button edit</string>
+    <string name="cd_ic_empty_list">Image empty list</string>
 
     <!-- TODO: Fragments labels -->
     <string name="label_home">To do</string>
@@ -62,5 +63,9 @@
 
     <!-- TODO: Widget -->
     <string name="label_new_task">New task</string>
+
+    <!-- TODO: Empty layout -->
+    <string name="txt_title_empty_list">Your to do list is empty</string>
+    <string name="txt_description_empty_list">You can start by creating a new task by pressing the floating button below.</string>
 
 </resources>

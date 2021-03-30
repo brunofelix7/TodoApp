@@ -96,6 +96,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         )
 
         adapter.addLoadStateListener { loadState ->
+            binding.includEmptyList.root.isVisible = adapter.itemCount == 0
             binding.rvItems.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.btnRetry.isVisible = loadState.source.refresh is LoadState.Error
