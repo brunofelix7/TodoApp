@@ -1,8 +1,11 @@
 package com.brunofelixdev.mytodoapp.extension
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -15,6 +18,18 @@ import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.worker.ItemWorker
 import java.util.concurrent.TimeUnit
+
+fun Activity.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Activity.hideKeyboard() {
+    val view = this.currentFocus
+    if (view != null) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
 
 fun Context.sendNotification(title: String, description: String, notificationId: Long) {
     val intent = Intent(this, MainActivity::class.java).apply {

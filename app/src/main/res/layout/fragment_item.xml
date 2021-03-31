@@ -17,6 +17,7 @@
             <include
                 android:id="@+id/includ_empty_list"
                 layout="@layout/include_empty_list"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

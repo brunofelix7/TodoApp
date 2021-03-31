@@ -32,7 +32,7 @@ class ItemRepository @Inject constructor(
 
             val dueDateTime = "$dueDate ${item.dueTime}"
             val from = DateTime.now()
-            val to = DateTime(dueDateTime.parseToDate(pattern = "dd/MM/yyyy HH:mm"))
+            val to = DateTime(dueDateTime.parseToDate(pattern = "MM-dd-yyyy HH:mm"))
             val duration = Duration(from, to)
 
             item.workDuration = duration.standardMinutes.toInt()

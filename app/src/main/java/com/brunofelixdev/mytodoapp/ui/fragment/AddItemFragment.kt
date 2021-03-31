@@ -48,7 +48,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
     companion object {
         private val TAG = AddItemFragment::class.java.simpleName
-        private const val CALENDAR_MASK = "##/##/####"
+        private const val CALENDAR_MASK = "##-##-####"
         private const val CLOCK_MASK = "##:##"
     }
 
@@ -110,11 +110,11 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         getDateTimeCalendar()
 
-        TimePickerDialog(requireContext(), this, hour, minute, true).show()
+        TimePickerDialog(requireContext(), this, hour, minute, false).show()
 
         binding.tilDueDate.error = null
 
-        binding.etDueDate.setText("${pickedDay}/${pickedMonth}/${pickedYear}")
+        binding.etDueDate.setText("${pickedMonth}-${pickedDay}-${pickedYear}")
     }
 
     @SuppressLint("SetTextI18n")
@@ -139,6 +139,10 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             (activity as AppCompatActivity?)!!.supportActionBar?.title =
                 resources.getString(R.string.label_edit_item)
             binding.etName.setText(currentItem?.name)
+            binding.etDueDate.setText(currentItem?.dueDate
+                ?.parseToDate("EEE, MMM dd, yyyy")
+                ?.parseToString("MM-dd-yyyy"))
+            binding.etDueTime.setText(currentItem?.dueTime)
         }
 
         binding.btnDatePicker.setOnClickListener {
@@ -150,7 +154,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         binding.btnTimePicker.setOnClickListener {
             activity?.hideKeyboard()
             getDateTimeCalendar()
-            TimePickerDialog(requireContext(), this, hour, minute, true).show()
+            TimePickerDialog(requireContext(), this, hour, minute, false).show()
         }
     }
 

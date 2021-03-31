@@ -10,9 +10,9 @@ class DateExtensionTest {
 
     @Test
     fun testConvert() {
-        val dueDateFromUser = "28/03/2021 21:00"
+        val dueDateFromUser = "03-28-2021 21:00"
         val from = DateTime.now()
-        val to = DateTime(dueDateFromUser.parseToDate(pattern = "dd/MM/yyyy HH:mm"))
+        val to = DateTime(dueDateFromUser.parseToDate(pattern = "MM-dd-yyyy HH:mm"))
         val duration = Duration(from, to)
         val result = duration.standardMinutes
 

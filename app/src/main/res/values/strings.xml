@@ -40,7 +40,7 @@
     <string name="txt_hint_item_name">Describe your task</string>
     <string name="label_due_date">Due date</string>
     <string name="label_due_time">Due time</string>
-    <string name="txt_hint_due_date">dd/mm/yyyy</string>
+    <string name="txt_hint_due_date">mm-dd-yyyy</string>
     <string name="txt_hint_due_time">HH:mm</string>
 
     <!-- TODO: ItemDetailsFragment -->

@@ -13,6 +13,15 @@ fun Date.parseToString(pattern: String = "EEE, MMM dd, yyyy"): String? {
     }
 }
 
+fun String.parseToDate(pattern: String = "MM-dd-yyyy"): Date? {
+    val formatter = SimpleDateFormat(pattern, Locale.ENGLISH)
+    return try {
+        formatter.parse(this)
+    } catch (e: Exception) {
+        null
+    }
+}
+
 fun Date.parseToLocalDateTime(): LocalDateTime {
     return LocalDateTime(this)
 }
