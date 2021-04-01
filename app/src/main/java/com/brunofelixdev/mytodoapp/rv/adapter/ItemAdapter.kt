@@ -1,5 +1,6 @@
 package com.brunofelixdev.mytodoapp.rv.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -12,10 +13,11 @@ import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 class ItemAdapter : PagingDataAdapter<Item, ItemViewHolder>(DIFF_CALLBACK) {
 
     var listener: ItemClickListener? = null
+    lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val root = RowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(root, listener)
+        return ItemViewHolder(root, listener, context)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

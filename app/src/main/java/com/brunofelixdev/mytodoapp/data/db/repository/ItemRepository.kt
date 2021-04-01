@@ -6,12 +6,9 @@ import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.extension.getDurationBetweenDates
 import com.brunofelixdev.mytodoapp.extension.parseToDate
 import com.brunofelixdev.mytodoapp.extension.parseToString
-import org.joda.time.DateTime
-import org.joda.time.Duration
-import org.joda.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.inject.Inject
 
@@ -27,15 +24,13 @@ class ItemRepository @Inject constructor(
         return try {
             val dueDate = item.dueDate
             val dueDateResult = item.dueDate.parseToDate()
+
             item.dueDate = dueDateResult?.parseToString() ?: dueDate
             item.workTag = "tag-${UUID.randomUUID()}"
 
             val dueDateTime = "$dueDate ${item.dueTime}"
-            val from = DateTime.now()
-            val to = DateTime(dueDateTime.parseToDate(pattern = "MM-dd-yyyy HH:mm"))
-            val duration = Duration(from, to)
 
-            item.workDuration = duration.standardMinutes.toInt()
+            item.workDuration = getDurationBetweenDates(dueDateTime)
 
             val result = dao.insert(item)
 

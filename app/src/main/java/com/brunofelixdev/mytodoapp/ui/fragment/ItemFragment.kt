@@ -90,6 +90,7 @@ class ItemFragment : Fragment(), ItemClickListener {
 
     private fun initAdapter() {
         adapter.listener = this
+        adapter.context = requireContext()
         binding.rvItems.adapter = adapter.withLoadStateHeaderAndFooter(
             header = ItemLoadStateAdapter { adapter.retry() },
             footer = ItemLoadStateAdapter { adapter.retry() }

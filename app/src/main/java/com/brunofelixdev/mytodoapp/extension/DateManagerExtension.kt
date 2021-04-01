@@ -1,5 +1,7 @@
 package com.brunofelixdev.mytodoapp.extension
 
+import org.joda.time.DateTime
+import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +24,12 @@ fun String.parseToDate(pattern: String = "MM-dd-yyyy"): Date? {
     }
 }
 
-fun Date.parseToLocalDateTime(): LocalDateTime {
-    return LocalDateTime(this)
+fun String.getDateMarker() = this.parseToDate("HH:mm")?.parseToString("HH:mm a")
+
+
+fun getDurationBetweenDates(dueDateTime: String) : Int {
+    val from = DateTime.now()
+    val to = DateTime(dueDateTime.parseToDate(pattern = "MM-dd-yyyy HH:mm"))
+    val duration = Duration(from, to)
+    return duration.standardMinutes.toInt()
 }

@@ -16,7 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemDetailsBinding
-import com.brunofelixdev.mytodoapp.extension.toast
+import com.brunofelixdev.mytodoapp.extension.*
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -63,9 +63,13 @@ class ItemDetailsFragment : Fragment() {
 
         val currentItem = args.currentItem
 
+        val dueTime = currentItem.dueTime.getDateMarker()
+
         binding.tvName.text = currentItem.name
         binding.tvDueDate.text = currentItem.dueDate
-        binding.tvDueTime.text = currentItem.dueTime
+        binding.tvDueTime.text = dueTime
+
+        checkIfDateHasPassed(currentItem)
 
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(
             requireContext(),
@@ -126,5 +130,17 @@ class ItemDetailsFragment : Fragment() {
         builder.setMessage("Are you sure you want to delete the item '${item.name}'?")
         builder.create()
         builder.show()
+    }
+
+    private fun checkIfDateHasPassed(item: Item) {
+        val dueDateTime = "${item.dueDate.parseToDate("EEE, MMM dd, yyyy")
+            ?.parseToString("MM-dd-yyyy")} ${item.dueTime}"
+        val duration = getDurationBetweenDates(dueDateTime)
+
+        if (duration < 0) {
+            binding.tvName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+            binding.tvDueDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+            binding.tvDueTime.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+        }
     }
 }
