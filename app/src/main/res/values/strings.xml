@@ -68,4 +68,10 @@
     <string name="txt_title_empty_list">Your to do list is empty</string>
     <string name="txt_description_empty_list">You can start by creating a new task by pressing the floating button below.</string>
 
+    <!-- TODO: Sort by array -->
+    <string-array name="sort_by_array">
+        <item>Name</item>
+        <item>Due date</item>
+    </string-array>
+
 </resources>

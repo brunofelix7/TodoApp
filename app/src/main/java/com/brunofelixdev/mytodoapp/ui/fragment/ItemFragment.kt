@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +21,7 @@ import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
+import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -71,7 +73,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_filter -> {
-                activity?.toast("Sort by...")
+                sortByDialog()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -119,6 +121,33 @@ class ItemFragment : Fragment(), ItemClickListener {
                 adapter.submitData(it)
             }
         }
+    }
+
+    private fun sortByDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val itemsArray = resources.getStringArray(R.array.sort_by_array)
+        val checkedItem = -1
+
+        builder.setTitle("Choose a filter")
+        builder.setSingleChoiceItems(itemsArray, checkedItem) { dialog, which ->
+            when(itemsArray[which]) {
+                Constants.SORT_BY_NAME -> {
+                    activity?.toast("which = $which")
+                }
+                Constants.SORT_BY_DUE_DATE -> {
+                    activity?.toast("which = $which")
+                }
+            }
+        }
+        builder.setPositiveButton("Ok") {dialog, which ->
+            //  TODO: Salvar no preferences
+        }
+        builder.setNeutralButton("Cancel") { dialog, which ->
+            dialog.cancel()
+        }
+
+        builder.create()
+        builder.show()
     }
 
     override fun onCheckedClick(item: Item, cbItem: CheckBox) {

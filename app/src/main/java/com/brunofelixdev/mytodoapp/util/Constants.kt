@@ -11,4 +11,8 @@ object Constants {
     const val PATTERN_HH_MM: String = "HH:mm"
     const val PATTERN_YYYY_MM_DD_HH_MM: String = "yyyy-MM-dd HH:mm"
 
+    //  Filters
+    const val SORT_BY_NAME: String = "Name"
+    const val SORT_BY_DUE_DATE: String = "Due date"
+
 }
