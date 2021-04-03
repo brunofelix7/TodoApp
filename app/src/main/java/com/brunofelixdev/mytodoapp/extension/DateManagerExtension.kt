@@ -2,7 +2,6 @@ package com.brunofelixdev.mytodoapp.extension
 
 import org.joda.time.DateTime
 import org.joda.time.Duration
-import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,9 +22,6 @@ fun String.parseToDate(pattern: String = "MM-dd-yyyy"): Date? {
         null
     }
 }
-
-fun String.getDateMarker() = this.parseToDate("HH:mm")?.parseToString("HH:mm a")
-
 
 fun getDurationBetweenDates(dueDateTime: String) : Int {
     val from = DateTime.now()

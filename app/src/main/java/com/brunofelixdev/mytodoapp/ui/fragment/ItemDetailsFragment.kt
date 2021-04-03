@@ -63,11 +63,9 @@ class ItemDetailsFragment : Fragment() {
 
         val currentItem = args.currentItem
 
-        val dueTime = currentItem.dueTime.getDateMarker()
-
         binding.tvName.text = currentItem.name
         binding.tvDueDate.text = currentItem.dueDate
-        binding.tvDueTime.text = dueTime
+        binding.tvDueTime.text = currentItem.dueTime
 
         checkIfDateHasPassed(currentItem)
 

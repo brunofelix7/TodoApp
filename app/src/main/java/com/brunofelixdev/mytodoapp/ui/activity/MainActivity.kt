@@ -1,6 +1,7 @@
 package com.brunofelixdev.mytodoapp.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MyToDoApp)
@@ -35,10 +40,14 @@ class MainActivity : AppCompatActivity() {
         drawerMenuSetup()
 
         val extras = intent.getStringExtra(AppWidget.KEY_WIDGET)
-        if (extras != null) {
+
+        if (extras != null && extras == AppWidget.EXTRAS_VALUE) {
+            Log.d(TAG, extras)
             val action = ItemFragmentDirections.navigateToAddItem(null)
             navController = findNavController(R.id.fragment)
             navController.navigate(action)
+        } else {
+            Log.d(TAG, "extras es null")
         }
     }
 

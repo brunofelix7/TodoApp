@@ -15,6 +15,7 @@ data class Item(
     var isDone: Boolean = false,
     var dueDate: String = "",
     var dueTime: String = "",
+    var dueDateTime: String = "",
     var workTag: String = "",
     var workDuration: Int = 0
 ) : Parcelable

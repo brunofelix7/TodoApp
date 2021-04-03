@@ -25,12 +25,12 @@ class ItemRepository @Inject constructor(
             val dueDate = item.dueDate
             val dueDateResult = item.dueDate.parseToDate()
 
+            item.dueDateTime = "$dueDate ${item.dueTime}"
+                .parseToDate("MM-dd-yyyy HH:mm")
+                ?.parseToString("yyyy-MM-dd HH:mm")!!
             item.dueDate = dueDateResult?.parseToString() ?: dueDate
             item.workTag = "tag-${UUID.randomUUID()}"
-
-            val dueDateTime = "$dueDate ${item.dueTime}"
-
-            item.workDuration = getDurationBetweenDates(dueDateTime)
+            item.workDuration = getDurationBetweenDates("$dueDate ${item.dueTime}")
 
             val result = dao.insert(item)
 

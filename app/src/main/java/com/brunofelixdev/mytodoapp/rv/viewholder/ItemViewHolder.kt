@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
-import com.brunofelixdev.mytodoapp.extension.getDateMarker
 import com.brunofelixdev.mytodoapp.extension.getDurationBetweenDates
 import com.brunofelixdev.mytodoapp.extension.parseToDate
 import com.brunofelixdev.mytodoapp.extension.parseToString
@@ -22,7 +21,7 @@ class ItemViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun bind(item: Item) {
         binding.tvName.text = item.name
-        binding.tvDueDate.text = "${item.dueDate} ${item.dueTime.getDateMarker()}"
+        binding.tvDueDate.text = "${item.dueDate} ${item.dueTime}"
         binding.itemLayout.setOnClickListener {
             listener?.onItemClick(item)
         }
