@@ -11,8 +11,8 @@
         android:label="@string/label_home"
         tools:layout="@layout/fragment_item">
         <action
-            android:id="@+id/navigateToAddItem"
-            app:destination="@id/addItemFragment"
+            android:id="@+id/navigateToItemForm"
+            app:destination="@id/itemFormFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -33,10 +33,10 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/addItemFragment"
-        android:name="com.brunofelixdev.mytodoapp.ui.fragment.AddItemFragment"
+        android:id="@+id/itemFormFragment"
+        android:name="com.brunofelixdev.mytodoapp.ui.fragment.ItemFormFragment"
         android:label="@string/label_add_item"
-        tools:layout="@layout/fragment_add_item">
+        tools:layout="@layout/fragment_item_form">
         <action
             android:id="@+id/navigateToItem"
             app:destination="@id/itemFragment"
@@ -93,8 +93,8 @@
             android:name="currentItem"
             app:argType="com.brunofelixdev.mytodoapp.data.db.entity.Item" />
         <action
-            android:id="@+id/navigateToAddItem"
-            app:destination="@id/addItemFragment"
+            android:id="@+id/navigateToItemForm"
+            app:destination="@id/itemFormFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"

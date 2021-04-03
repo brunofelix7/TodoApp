@@ -9,7 +9,6 @@ import android.util.Log
 import android.widget.RemoteViews
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
-import com.brunofelixdev.mytodoapp.ui.fragment.AddItemFragment
 
 class AppWidget : AppWidgetProvider() {
 

@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.databinding.FragmentAddItemBinding
+import com.brunofelixdev.mytodoapp.databinding.FragmentItemFormBinding
 import com.brunofelixdev.mytodoapp.extension.*
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
@@ -27,13 +27,13 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
-    private var _binding: FragmentAddItemBinding? = null
-    private val binding: FragmentAddItemBinding get() = _binding!!
+    private var _binding: FragmentItemFormBinding? = null
+    private val binding: FragmentItemFormBinding get() = _binding!!
 
-    private val args: AddItemFragmentArgs by navArgs()
+    private val args: ItemFormFragmentArgs by navArgs()
 
     private val currentItem get() = args.currentItem
 
@@ -48,7 +48,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     private var minute: Int = 0
 
     companion object {
-        private val TAG = AddItemFragment::class.java.simpleName
+        private val TAG = ItemFormFragment::class.java.simpleName
         private const val CALENDAR_MASK = "##-##-####"
         private const val CLOCK_MASK = "##:##"
     }
@@ -63,7 +63,7 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAddItemBinding.inflate(inflater, container, false)
+        _binding = FragmentItemFormBinding.inflate(inflater, container, false)
         initViews()
         collectData()
         return binding.root
@@ -182,10 +182,10 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
                         if (currentItem != null) {
                             val action =
-                                AddItemFragmentDirections.navigateToItemDetails(currentItem!!)
+                                ItemFormFragmentDirections.navigateToItemDetails(currentItem!!)
                             findNavController().navigate(action)
                         } else {
-                            val action = AddItemFragmentDirections.navigateToItem()
+                            val action = ItemFormFragmentDirections.navigateToItem()
                             findNavController().navigate(action)
                         }
                     }

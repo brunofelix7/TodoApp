@@ -81,7 +81,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
         binding.fab.setOnClickListener {
-            val action = ItemFragmentDirections.navigateToAddItem(null)
+            val action = ItemFragmentDirections.navigateToItemForm(null)
             findNavController().navigate(action)
         }
 

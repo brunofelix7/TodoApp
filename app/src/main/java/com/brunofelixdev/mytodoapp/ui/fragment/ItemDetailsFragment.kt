@@ -112,7 +112,7 @@ class ItemDetailsFragment : Fragment() {
     }
 
     private fun updateItem(item: Item) {
-        val action = ItemDetailsFragmentDirections.navigateToAddItem(item)
+        val action = ItemDetailsFragmentDirections.navigateToItemForm(item)
         findNavController().navigate(action)
     }
 

@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         if (extras != null && extras == AppWidget.EXTRAS_VALUE) {
             Log.d(TAG, extras)
-            val action = ItemFragmentDirections.navigateToAddItem(null)
+            val action = ItemFragmentDirections.navigateToItemForm(null)
             navController = findNavController(R.id.fragment)
             navController.navigate(action)
         } else {

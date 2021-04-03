@@ -11,6 +11,6 @@ object DbSchema {
 
     //  Queries
     const val QUERY_ORDER_BY_NAME = "SELECT * FROM items WHERE isDone == 0 ORDER BY name ASC"
-    const val QUERY_ORDER_BY_DATETIME = "SELECT * FROM items WHERE isDone == 0 ORDER BY date(dueDateTime) ASC"
+    const val QUERY_ORDER_BY_DATETIME = "SELECT * FROM items WHERE isDone == 0 ORDER BY datetime(dueDateTime) ASC"
 
 }

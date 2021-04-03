@@ -28,4 +28,8 @@ data class Item(
 
     }
 
+    fun toDbFormat() {
+
+    }
+
 }
