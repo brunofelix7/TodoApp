@@ -18,4 +18,14 @@ data class Item(
     var dueDateTime: String = "",
     var workTag: String = "",
     var workDuration: Int = 0
-) : Parcelable
+) : Parcelable {
+
+    fun getTime() {
+
+    }
+
+    fun getDate() {
+
+    }
+
+}

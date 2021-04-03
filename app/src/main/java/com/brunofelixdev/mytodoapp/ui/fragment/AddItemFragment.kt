@@ -18,6 +18,7 @@ import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentAddItemBinding
 import com.brunofelixdev.mytodoapp.extension.*
+import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -140,19 +141,17 @@ class AddItemFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 resources.getString(R.string.label_edit_item)
             binding.etName.setText(currentItem?.name)
             binding.etDueDate.setText(currentItem?.dueDate
-                ?.parseToDate("EEE, MMM dd, yyyy")
-                ?.parseToString("MM-dd-yyyy"))
+                ?.parseToDate(Constants.PATTERN_EEE_MMM_DD_YYY)
+                ?.parseToString(Constants.PATTERN_MM_DD_YYYY))
             binding.etDueTime.setText(currentItem?.dueTime)
         }
 
-        binding.btnDatePicker.setOnClickListener {
-            activity?.hideKeyboard()
+        binding.etDueDate.setOnClickListener {
             getDateTimeCalendar()
             DatePickerDialog(requireContext(), this, year, month, day).show()
         }
 
-        binding.btnTimePicker.setOnClickListener {
-            activity?.hideKeyboard()
+        binding.etDueTime.setOnClickListener {
             getDateTimeCalendar()
             TimePickerDialog(requireContext(), this, hour, minute, false).show()
         }
