@@ -33,7 +33,9 @@
 
     <!-- TODO: ItemFragment -->
     <string name="txt_btn_retry">Retry</string>
-    <string name="list_title">All items</string>
+    <string name="list_title">Sorted by</string>
+    <string name="txt_sorted_by_name">Name</string>
+    <string name="txt_sorted_by_due_date">Due date</string>
 
     <!-- TODO: AddItemFragment -->
     <string name="label_item_name">Name</string>
@@ -73,5 +75,8 @@
         <item>Name</item>
         <item>Due date</item>
     </string-array>
+
+    <!-- TODO: Preferences Keys -->
+    <string name="pref_key_filter">key-filter</string>
 
 </resources>

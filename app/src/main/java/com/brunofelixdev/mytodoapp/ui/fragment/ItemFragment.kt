@@ -16,11 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.pref.getFilter
+import com.brunofelixdev.mytodoapp.data.pref.saveFilter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
+import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,6 +85,22 @@ class ItemFragment : Fragment(), ItemClickListener {
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
+        val filter = getFilter(activity)
+
+        if (filter != null) {
+            when(filter) {
+                Constants.SORT_BY_NAME -> {
+                    binding.tvSortedBy.text = activity?.resources?.getString(R.string.txt_sorted_by_name)
+                }
+                Constants.SORT_BY_DUE_DATE -> {
+                    binding.tvSortedBy.text = activity?.resources?.getString(R.string.txt_sorted_by_due_date)
+                }
+                else -> {
+                    binding.tvSortedBy.text = ""
+                }
+            }
+        }
+
         binding.fab.setOnClickListener {
             val action = ItemFragmentDirections.navigateToItemForm(null)
             findNavController().navigate(action)
@@ -130,17 +149,11 @@ class ItemFragment : Fragment(), ItemClickListener {
 
         builder.setTitle("Choose a filter")
         builder.setSingleChoiceItems(itemsArray, checkedItem) { dialog, which ->
-            when(itemsArray[which]) {
-                Constants.SORT_BY_NAME -> {
-                    activity?.toast("which = $which")
-                }
-                Constants.SORT_BY_DUE_DATE -> {
-                    activity?.toast("which = $which")
-                }
-            }
+            val item = itemsArray[which]
+            saveFilter(activity, item)
         }
         builder.setPositiveButton("Ok") {dialog, which ->
-            //  TODO: Salvar no preferences
+            binding.tvSortedBy.text = getFilter(activity)
         }
         builder.setNeutralButton("Cancel") { dialog, which ->
             dialog.cancel()
