@@ -75,6 +75,8 @@ class ItemRepository @Inject constructor(
         }
     }
 
-    override fun fetchAll(): PagingSource<Int, Item> = dao.fetchAll()
+    override fun fetchAllOrderByName(): PagingSource<Int, Item> = dao.fetchAllOrderByName()
+
+    override fun fetchAllOrderByDueDate(): PagingSource<Int, Item> = dao.fetchAllOrderByDueDate()
 
 }

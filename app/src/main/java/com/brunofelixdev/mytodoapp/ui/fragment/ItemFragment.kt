@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,14 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.data.pref.getFilter
-import com.brunofelixdev.mytodoapp.data.pref.saveFilter
+import com.brunofelixdev.mytodoapp.data.pref.getFilterFromPreferences
+import com.brunofelixdev.mytodoapp.data.pref.saveFilterInPreferences
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
-import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,8 +83,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
-        val filter = getFilter(activity)
-
+        val filter = getFilterFromPreferences(requireContext())
         if (filter != null) {
             when(filter) {
                 Constants.SORT_BY_NAME -> {
@@ -94,9 +91,6 @@ class ItemFragment : Fragment(), ItemClickListener {
                 }
                 Constants.SORT_BY_DUE_DATE -> {
                     binding.tvSortedBy.text = activity?.resources?.getString(R.string.txt_sorted_by_due_date)
-                }
-                else -> {
-                    binding.tvSortedBy.text = ""
                 }
             }
         }
@@ -119,7 +113,9 @@ class ItemFragment : Fragment(), ItemClickListener {
 
         adapter.addLoadStateListener { loadState ->
             binding.tvListTitle.isVisible = adapter.itemCount > 0
-            binding.includEmptyList.root.isVisible = adapter.itemCount == 0
+            binding.tvSortedBy.isVisible = adapter.itemCount > 0
+            binding.includEmptyList.root.isVisible = (adapter.itemCount == 0 &&
+                    loadState.source.refresh is LoadState.NotLoading)
             binding.rvItems.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.btnRetry.isVisible = loadState.source.refresh is LoadState.Error
@@ -147,35 +143,35 @@ class ItemFragment : Fragment(), ItemClickListener {
         val itemsArray = resources.getStringArray(R.array.sort_by_array)
         val checkedItem = -1
 
-        builder.setTitle("Choose a filter")
+        builder.setTitle(activity?.resources?.getString(R.string.title_dialog_sort_by))
         builder.setSingleChoiceItems(itemsArray, checkedItem) { dialog, which ->
             val item = itemsArray[which]
-            saveFilter(activity, item)
+            saveFilterInPreferences(requireContext(), item)
         }
-        builder.setPositiveButton("Ok") {dialog, which ->
-            binding.tvSortedBy.text = getFilter(activity)
+        builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {dialog, which ->
+            activity?.finish()
+            startActivity(activity?.intent)
         }
-        builder.setNeutralButton("Cancel") { dialog, which ->
+        builder.setNeutralButton(activity?.resources?.getString(R.string.btn_dialog_cancel)) { dialog, which ->
             dialog.cancel()
         }
-
         builder.create()
         builder.show()
     }
 
     override fun onCheckedClick(item: Item, cbItem: CheckBox) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") { _, _ ->
+        builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_yes)) { _, _ ->
             viewModel.checkItemAsDone(item)
         }
-        builder.setNegativeButton("No") {_, _ ->
+        builder.setNegativeButton(activity?.resources?.getString(R.string.btn_dialog_no)) {_, _ ->
             cbItem.isChecked = false
         }
         builder.setOnDismissListener {
             cbItem.isChecked = false
         }
-        builder.setTitle("Mark as done?")
-        builder.setMessage("Are you sure you want to mark as done the item '${item.name}'?")
+        builder.setTitle(activity?.resources?.getString(R.string.title_dialog_item_delete))
+        builder.setMessage("${activity?.resources?.getString(R.string.txt_dialog_item_delete)} '${item.name}'?")
         builder.create()
         builder.show()
     }

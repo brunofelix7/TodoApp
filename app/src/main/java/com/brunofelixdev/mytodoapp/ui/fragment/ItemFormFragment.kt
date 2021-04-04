@@ -147,11 +147,13 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         }
 
         binding.etDueDate.setOnClickListener {
+            activity?.hideKeyboard()
             getDateTimeCalendar()
             DatePickerDialog(requireContext(), this, year, month, day).show()
         }
 
         binding.etDueTime.setOnClickListener {
+            activity?.hideKeyboard()
             getDateTimeCalendar()
             TimePickerDialog(requireContext(), this, hour, minute, false).show()
         }

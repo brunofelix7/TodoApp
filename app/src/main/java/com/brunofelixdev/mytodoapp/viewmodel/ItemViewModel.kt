@@ -9,8 +9,10 @@ import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.data.pref.getFilterFromPreferences
 import com.brunofelixdev.mytodoapp.extension.cancelWork
 import com.brunofelixdev.mytodoapp.extension.createWork
+import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,7 +32,11 @@ class ItemViewModel @Inject constructor(
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
 
     val itemsList = Pager(PagingConfig(pageSize = 20, enablePlaceholders = false)) {
-        repository.fetchAll()
+        if (getFilterFromPreferences(resourcesProvider.getApplicationContext()) == Constants.SORT_BY_NAME) {
+            repository.fetchAllOrderByName()
+        } else {
+            repository.fetchAllOrderByDueDate()
+        }
     }.flow.cachedIn(viewModelScope)
 
     val formErrors = mutableMapOf<String, String>()
