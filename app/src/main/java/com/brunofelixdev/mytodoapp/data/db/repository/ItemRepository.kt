@@ -47,6 +47,15 @@ class ItemRepository @Inject constructor(
 
     override suspend fun update(item: Item): OperationResult<Unit> {
         return try {
+            val dueDate = item.dueDate
+            val dueDateResult = item.dueDate.parseToDate()
+
+            item.dueDateTime = "$dueDate ${item.dueTime}"
+                .parseToDate("MM-dd-yyyy HH:mm")
+                ?.parseToString("yyyy-MM-dd HH:mm")!!
+            item.dueDate = dueDateResult?.parseToString() ?: dueDate
+            item.workDuration = getDurationBetweenDates("$dueDate ${item.dueTime}")
+
             dao.update(item)
             OperationResult.Success(Unit)
         } catch (e: Exception) {

@@ -99,6 +99,9 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.update(item)) {
                 is OperationResult.Success -> {
+                    resourcesProvider.getApplicationContext().cancelWork(item.workTag)
+                    resourcesProvider.getApplicationContext().createWork(item, item.id.toLong())
+
                     _uiStateFlow.value = UiState.Success(
                         resourcesProvider.getResources().getString(R.string.msg_success_update)
                     )
