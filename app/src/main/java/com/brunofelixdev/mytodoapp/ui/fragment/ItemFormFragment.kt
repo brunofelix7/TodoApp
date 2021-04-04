@@ -139,11 +139,12 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         if (currentItem != null) {
             (activity as AppCompatActivity?)!!.supportActionBar?.title =
                 resources.getString(R.string.label_edit_item)
-            binding.etName.setText(currentItem?.name)
-            binding.etDueDate.setText(currentItem?.dueDate
-                ?.parseToDate(Constants.PATTERN_EEE_MMM_DD_YYY)
-                ?.parseToString(Constants.PATTERN_MM_DD_YYYY))
-            binding.etDueTime.setText(currentItem?.dueTime)
+
+            currentItem?.apply {
+                binding.etName.setText(currentItem?.name)
+                binding.etDueDate.setText(currentItem?.dueDateTime?.getDueDate())
+                binding.etDueTime.setText(currentItem?.dueDateTime?.getDueTime())
+            }
         }
 
         binding.etDueDate.setOnClickListener {
@@ -192,6 +193,7 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                         }
                     }
                     is ItemViewModel.UiState.Error -> {
+                        activity?.toast(uiState.errorMessage)
                         binding.progressBar.isVisible = false
                         checkFormErrors()
                     }
@@ -204,13 +206,11 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     private fun submitForm() {
         val item = Item().apply {
             name = binding.etName.text.toString()
-            dueDate = binding.etDueDate.text.toString()
-            dueTime = binding.etDueTime.text.toString()
+            dueDateTime = "${binding.etDueDate.text} ${binding.etDueTime.text}".toDbFormat()
         }
         if (currentItem != null) {
             currentItem?.name = item.name
-            currentItem?.dueDate = item.dueDate
-            currentItem?.dueTime = item.dueTime
+            currentItem?.dueDateTime = item.dueDateTime
             viewModel.updateItem(currentItem!!)
         } else {
             viewModel.insertItem(item)

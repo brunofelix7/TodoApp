@@ -55,7 +55,9 @@ fun Context.createWork(item: Item, notificationId: Long) {
     val inputData = Data.Builder().apply {
         putLong(ItemWorker.KEY_ID, notificationId)
         putString(ItemWorker.KEY_NAME, item.name)
-        putString(ItemWorker.KEY_DUE_DATE, "${item.dueTime} - ${item.dueDate}")
+        item.apply {
+            putString(ItemWorker.KEY_DUE_DATE, "${dueDateTime.getDueDateView()} ${dueDateTime.getDueTime()}")
+        }
     }
 
     val notificationWork = OneTimeWorkRequest.Builder(ItemWorker::class.java)

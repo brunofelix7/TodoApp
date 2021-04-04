@@ -147,15 +147,15 @@ class ItemFragment : Fragment(), ItemClickListener {
         val checkedItem = -1
 
         builder.setTitle(activity?.resources?.getString(R.string.title_dialog_sort_by))
-        builder.setSingleChoiceItems(itemsArray, checkedItem) { dialog, which ->
+        builder.setSingleChoiceItems(itemsArray, checkedItem) { _, which ->
             val item = itemsArray[which]
             setItemsFilter(requireContext(), item)
         }
-        builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {dialog, which ->
+        builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {_, _ ->
             initAdapter()
             collectData()
         }
-        builder.setNeutralButton(activity?.resources?.getString(R.string.btn_dialog_cancel)) { dialog, which ->
+        builder.setNeutralButton(activity?.resources?.getString(R.string.btn_dialog_cancel)) { dialog, _ ->
             dialog.cancel()
         }
         builder.create()
@@ -173,8 +173,8 @@ class ItemFragment : Fragment(), ItemClickListener {
         builder.setOnDismissListener {
             cbItem.isChecked = false
         }
-        builder.setTitle(activity?.resources?.getString(R.string.title_dialog_item_delete))
-        builder.setMessage("${activity?.resources?.getString(R.string.txt_dialog_item_delete)} '${item.name}'?")
+        builder.setTitle(activity?.resources?.getString(R.string.title_dialog_item_done))
+        builder.setMessage("${activity?.resources?.getString(R.string.txt_dialog_item_done)} '${item.name}'?")
         builder.create()
         builder.show()
     }

@@ -63,9 +63,12 @@ class ItemDetailsFragment : Fragment() {
 
         val currentItem = args.currentItem
 
-        binding.tvName.text = currentItem.name
-        binding.tvDueDate.text = currentItem.dueDate
-        binding.tvDueTime.text = currentItem.dueTime
+        currentItem.apply {
+            binding.tvName.text = currentItem.name
+            binding.tvDueDate.text = currentItem.dueDateTime.getDueDateView()
+            binding.tvDueTime.text = currentItem.dueDateTime.getDueTime()
+            binding.collapsingToolbar.title = currentItem.name
+        }
 
         checkIfDateHasPassed(currentItem)
 
@@ -118,27 +121,27 @@ class ItemDetailsFragment : Fragment() {
 
     private fun deleteItem(item: Item) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") { _, _ ->
+        builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_yes)) { _, _ ->
             viewModel.deleteItem(item)
         }
-        builder.setNegativeButton("No") {_, _ ->
+        builder.setNegativeButton(activity?.resources?.getString(R.string.btn_dialog_no)) {_, _ ->
 
         }
-        builder.setTitle("Delete item?")
-        builder.setMessage("Are you sure you want to delete the item '${item.name}'?")
+        builder.setTitle(activity?.resources?.getString(R.string.title_dialog_item_delete))
+        builder.setMessage("${activity?.resources?.getString(R.string.txt_dialog_item_delete)} '${item.name}'?")
         builder.create()
         builder.show()
     }
 
     private fun checkIfDateHasPassed(item: Item) {
-        val dueDateTime = "${item.dueDate.parseToDate("EEE, MMM dd, yyyy")
-            ?.parseToString("MM-dd-yyyy")} ${item.dueTime}"
-        val duration = getDurationBetweenDates(dueDateTime)
+        item.apply {
+            val duration = dueDateTime.getDurationBetweenDates()
 
-        if (duration < 0) {
-            binding.tvName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
-            binding.tvDueDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
-            binding.tvDueTime.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+            if (duration < 0) {
+                binding.tvName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+                binding.tvDueDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+                binding.tvDueTime.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_500))
+            }
         }
     }
 }

@@ -88,8 +88,10 @@
     <string name="btn_dialog_yes">Yes</string>
     <string name="btn_dialog_no">No</string>
     <string name="title_dialog_sort_by">Choose a filter</string>
-    <string name="title_dialog_item_delete">Mark as done?</string>
-    <string name="txt_dialog_item_delete">Are you sure you want to mark as done the item</string>
+    <string name="title_dialog_item_done">Mark as done?</string>
+    <string name="txt_dialog_item_done">Are you sure you want to mark as done the item</string>
+    <string name="title_dialog_item_delete">Delete item?</string>
+    <string name="txt_dialog_item_delete">Are you sure you want to delete the item </string>
 
     <!-- TODO: Preferences Keys -->
     <string name="pref_name">user_preferences</string>

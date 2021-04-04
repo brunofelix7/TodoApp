@@ -139,11 +139,9 @@ class ItemViewModel @Inject constructor(
             formErrors[FIELD_NAME] =
                 resourcesProvider.getResources().getString(R.string.msg_required_name)
         }
-        if (item.dueDate.isEmpty() || item.dueDate.length < 10) {
+        if (item.dueDateTime.isEmpty() || item.dueDateTime == "error") {
             formErrors[FIELD_DUE_DATE] =
                 resourcesProvider.getResources().getString(R.string.msg_required_due_date)
-        }
-        if (item.dueTime.isEmpty() || item.dueTime.length < 5) {
             formErrors[FIELD_DUE_TIME] =
                 resourcesProvider.getResources().getString(R.string.msg_required_due_time)
         }

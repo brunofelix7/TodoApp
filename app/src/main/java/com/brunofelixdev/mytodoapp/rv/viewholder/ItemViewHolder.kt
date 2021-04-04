@@ -7,9 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
-import com.brunofelixdev.mytodoapp.extension.getDurationBetweenDates
-import com.brunofelixdev.mytodoapp.extension.parseToDate
-import com.brunofelixdev.mytodoapp.extension.parseToString
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 
 class ItemViewHolder constructor(
@@ -21,7 +18,9 @@ class ItemViewHolder constructor(
     @SuppressLint("SetTextI18n")
     fun bind(item: Item) {
         binding.tvName.text = item.name
-        binding.tvDueDate.text = "${item.dueDate} ${item.dueTime}"
+        item.apply {
+            binding.tvDueDate.text = "${dueDateTime.getDueDateView()} ${dueDateTime.getDueTime()}"
+        }
         binding.itemLayout.setOnClickListener {
             listener?.onItemClick(item)
         }
@@ -32,14 +31,14 @@ class ItemViewHolder constructor(
     }
 
     private fun checkIfDateHasPassed(item: Item) {
-        val dueDateTime = "${item.dueDate.parseToDate("EEE, MMM dd, yyyy")
-            ?.parseToString("MM-dd-yyyy")} ${item.dueTime}"
-        val duration = getDurationBetweenDates(dueDateTime)
+        item.apply {
+            val duration = dueDateTime.getDurationBetweenDates()
 
-        if (duration < 0) {
-            binding.ivTag.setColorFilter(ContextCompat.getColor(context, R.color.red_500))
-            binding.tvName.setTextColor(ContextCompat.getColor(context, R.color.red_500))
-            binding.tvDueDate.setTextColor(ContextCompat.getColor(context, R.color.red_500))
+            if (duration < 0) {
+                binding.ivTag.setColorFilter(ContextCompat.getColor(context, R.color.red_500))
+                binding.tvName.setTextColor(ContextCompat.getColor(context, R.color.red_500))
+                binding.tvDueDate.setTextColor(ContextCompat.getColor(context, R.color.red_500))
+            }
         }
     }
 }

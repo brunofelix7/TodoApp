@@ -6,9 +6,6 @@ import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
-import com.brunofelixdev.mytodoapp.extension.getDurationBetweenDates
-import com.brunofelixdev.mytodoapp.extension.parseToDate
-import com.brunofelixdev.mytodoapp.extension.parseToString
 import java.util.*
 import javax.inject.Inject
 
@@ -22,15 +19,10 @@ class ItemRepository @Inject constructor(
 
     override suspend fun insert(item: Item): OperationResult<Long> {
         return try {
-            val dueDate = item.dueDate
-            val dueDateResult = item.dueDate.parseToDate()
-
-            item.dueDateTime = "$dueDate ${item.dueTime}"
-                .parseToDate("MM-dd-yyyy HH:mm")
-                ?.parseToString("yyyy-MM-dd HH:mm")!!
-            item.dueDate = dueDateResult?.parseToString() ?: dueDate
             item.workTag = "tag-${UUID.randomUUID()}"
-            item.workDuration = getDurationBetweenDates("$dueDate ${item.dueTime}")
+            item.apply {
+                workDuration = dueDateTime.getDurationBetweenDates()
+            }
 
             val result = dao.insert(item)
 
@@ -47,14 +39,9 @@ class ItemRepository @Inject constructor(
 
     override suspend fun update(item: Item): OperationResult<Unit> {
         return try {
-            val dueDate = item.dueDate
-            val dueDateResult = item.dueDate.parseToDate()
-
-            item.dueDateTime = "$dueDate ${item.dueTime}"
-                .parseToDate("MM-dd-yyyy HH:mm")
-                ?.parseToString("yyyy-MM-dd HH:mm")!!
-            item.dueDate = dueDateResult?.parseToString() ?: dueDate
-            item.workDuration = getDurationBetweenDates("$dueDate ${item.dueTime}")
+            item.apply {
+                workDuration = dueDateTime.getDurationBetweenDates()
+            }
 
             dao.update(item)
             OperationResult.Success(Unit)
