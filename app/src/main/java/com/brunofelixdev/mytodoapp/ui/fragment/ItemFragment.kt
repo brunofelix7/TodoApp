@@ -1,5 +1,6 @@
 package com.brunofelixdev.mytodoapp.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
@@ -15,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.data.pref.getFilterFromPreferences
-import com.brunofelixdev.mytodoapp.data.pref.saveFilterInPreferences
+import com.brunofelixdev.mytodoapp.data.pref.getItemsFilter
+import com.brunofelixdev.mytodoapp.data.pref.setItemsFilter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
@@ -83,7 +84,7 @@ class ItemFragment : Fragment(), ItemClickListener {
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
-        val filter = getFilterFromPreferences(requireContext())
+        val filter = getItemsFilter(requireContext())
         if (filter != null) {
             when(filter) {
                 Constants.SORT_BY_NAME -> {
@@ -103,6 +104,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initAdapter() {
         adapter.listener = this
         adapter.context = requireContext()
@@ -112,6 +114,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         )
 
         adapter.addLoadStateListener { loadState ->
+            binding.tvListTitle.text = "${adapter.itemCount} items"
             binding.tvListTitle.isVisible = adapter.itemCount > 0
             binding.tvSortedBy.isVisible = adapter.itemCount > 0
             binding.includEmptyList.root.isVisible = (adapter.itemCount == 0 &&
@@ -146,11 +149,11 @@ class ItemFragment : Fragment(), ItemClickListener {
         builder.setTitle(activity?.resources?.getString(R.string.title_dialog_sort_by))
         builder.setSingleChoiceItems(itemsArray, checkedItem) { dialog, which ->
             val item = itemsArray[which]
-            saveFilterInPreferences(requireContext(), item)
+            setItemsFilter(requireContext(), item)
         }
         builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {dialog, which ->
-            activity?.finish()
-            startActivity(activity?.intent)
+            initAdapter()
+            collectData()
         }
         builder.setNeutralButton(activity?.resources?.getString(R.string.btn_dialog_cancel)) { dialog, which ->
             dialog.cancel()

@@ -3,6 +3,7 @@ package com.brunofelixdev.mytodoapp.ui.activity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,6 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brunofelixdev.mytodoapp.R
+import com.brunofelixdev.mytodoapp.data.pref.isNightModeEnabled
 import com.brunofelixdev.mytodoapp.databinding.ActivityMainBinding
 import com.brunofelixdev.mytodoapp.ui.fragment.ItemFragmentDirections
 import com.brunofelixdev.mytodoapp.ui.widget.AppWidget
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        checkNightMode()
         drawerMenuSetup()
 
         val extras = intent.getStringExtra(AppWidget.KEY_WIDGET)
@@ -48,6 +51,14 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(action)
         } else {
             Log.d(TAG, "extras es null")
+        }
+    }
+
+    private fun checkNightMode() {
+        if (isNightModeEnabled(this)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 

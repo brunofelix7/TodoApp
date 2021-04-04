@@ -33,11 +33,11 @@
 
     <!-- TODO: ItemFragment -->
     <string name="txt_btn_retry">Retry</string>
-    <string name="list_title">Sorted by</string>
-    <string name="txt_sorted_by_name">Name</string>
-    <string name="txt_sorted_by_due_date">Due date</string>
+    <string name="list_title">1 items</string>
+    <string name="txt_sorted_by_name">(by Name)</string>
+    <string name="txt_sorted_by_due_date">(by Date)</string>
 
-    <!-- TODO: AddItemFragment -->
+    <!-- TODO: ItemFormFragment -->
     <string name="label_item_name">Name</string>
     <string name="txt_hint_item_name">Describe your task</string>
     <string name="label_due_date">Due date</string>
@@ -47,6 +47,12 @@
 
     <!-- TODO: ItemDetailsFragment -->
     <string name="txt_btn_delete">Delete Item</string>
+
+    <!-- TODO: SettingsFragment -->
+    <string name="label_theme_settings">Theme</string>
+    <string name="txt_theme_settings">Select the theme you would like to view.</string>
+    <string name="radio_light">Light</string>
+    <string name="radio_dark">Dark</string>
 
     <!-- TODO: Messages -->
     <string name="msg_fields_required">All fields are required.</string>
@@ -88,5 +94,6 @@
     <!-- TODO: Preferences Keys -->
     <string name="pref_name">user_preferences</string>
     <string name="pref_key_filter">key-filter</string>
+    <string name="pref_key_night_mode">key-night-mode</string>
 
 </resources>
