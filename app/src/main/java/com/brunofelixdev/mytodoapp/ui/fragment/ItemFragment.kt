@@ -84,6 +84,17 @@ class ItemFragment : Fragment(), ItemClickListener {
     private fun initViews() {
         (activity as AppCompatActivity?)!!.supportActionBar?.show()
 
+        checkCurrentFilter()
+
+        binding.fab.setOnClickListener {
+            val action = ItemFragmentDirections.navigateToItemForm(null)
+            findNavController().navigate(action)
+        }
+
+        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+    }
+
+    private fun checkCurrentFilter() {
         val filter = getItemsFilter(requireContext())
         if (filter != null) {
             when(filter) {
@@ -95,13 +106,6 @@ class ItemFragment : Fragment(), ItemClickListener {
                 }
             }
         }
-
-        binding.fab.setOnClickListener {
-            val action = ItemFragmentDirections.navigateToItemForm(null)
-            findNavController().navigate(action)
-        }
-
-        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
     @SuppressLint("SetTextI18n")
@@ -154,6 +158,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {_, _ ->
             initAdapter()
             collectData()
+            checkCurrentFilter()
         }
         builder.setNeutralButton(activity?.resources?.getString(R.string.btn_dialog_cancel)) { dialog, _ ->
             dialog.cancel()
