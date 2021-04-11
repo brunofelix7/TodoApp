@@ -3,17 +3,18 @@ package com.brunofelixdev.mytodoapp.rv.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import com.brunofelixdev.mytodoapp.rv.viewholder.ItemViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
+import com.brunofelixdev.mytodoapp.rv.viewholder.ItemViewHolder
 
-class ItemAdapter : PagingDataAdapter<Item, ItemViewHolder>(DIFF_CALLBACK) {
+class ItemAdapter constructor(
+    private val context: Context,
+    private val items: List<Item>
+) : RecyclerView.Adapter<ItemViewHolder>() {
 
     var listener: ItemClickListener? = null
-    lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val root = RowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,17 +22,8 @@ class ItemAdapter : PagingDataAdapter<Item, ItemViewHolder>(DIFF_CALLBACK) {
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            holder.bind(item)
-        }
+        holder.bind(items[position])
     }
 
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem.id == newItem.id
-
-            override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
-        }
-    }
+    override fun getItemCount() = items.size
 }

@@ -18,7 +18,6 @@ import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemFormBinding
 import com.brunofelixdev.mytodoapp.extension.*
-import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -172,7 +171,7 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
     private fun collectData() {
         uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiStateFlow.collect { uiState ->
+            viewModel.items.collect { uiState ->
                 when (uiState) {
                     is ItemViewModel.UiState.Loading -> {
                         clearFormErrors()
@@ -181,7 +180,7 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                     is ItemViewModel.UiState.Success -> {
                         activity?.hideKeyboard()
                         binding.progressBar.isVisible = false
-                        activity?.toast(uiState.successMessage)
+                        activity?.toast(uiState.message ?: "")
 
                         if (currentItem != null) {
                             val action =

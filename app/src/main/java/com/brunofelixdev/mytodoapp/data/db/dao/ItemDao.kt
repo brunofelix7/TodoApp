@@ -1,6 +1,5 @@
 package com.brunofelixdev.mytodoapp.data.db.dao
 
-import androidx.paging.PagingSource
 import androidx.room.*
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
@@ -20,9 +19,9 @@ interface ItemDao {
     suspend fun checkAsDone(id: Int)
 
     @Query("SELECT * FROM items WHERE isDone == 0 ORDER BY name ASC")
-    fun fetchAllOrderByName(): PagingSource<Int, Item>
+    suspend fun fetchAllOrderByName(): List<Item>
 
     @Query("SELECT * FROM items WHERE isDone == 0 ORDER BY datetime(dueDateTime) ASC")
-    fun fetchAllOrderByDueDate(): PagingSource<Int, Item>
+    suspend fun fetchAllOrderByDueDate(): List<Item>
 
 }

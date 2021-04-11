@@ -44,9 +44,5 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideItemAdapter(): ItemAdapter = ItemAdapter()
-
-    @Singleton
-    @Provides
     fun provideResourceProvider(@ApplicationContext context: Context) = ResourceProvider(context)
 }

@@ -92,14 +92,14 @@ class ItemDetailsFragment : Fragment() {
 
     private fun collectData() {
         uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiStateFlow.collect { uiState ->
+            viewModel.items.collect { uiState ->
                 when(uiState) {
                     is ItemViewModel.UiState.Loading -> {
                         binding.btnDelete.isVisible = false
                         binding.deleteProgressBar.isVisible = true
                     }
                     is ItemViewModel.UiState.Success -> {
-                        activity?.toast(uiState.successMessage)
+                        activity?.toast(uiState.message ?: "")
                         val action = ItemDetailsFragmentDirections.navigateToItem()
                         findNavController().navigate(action)
                     }

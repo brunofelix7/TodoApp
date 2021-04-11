@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
@@ -21,7 +20,6 @@ import com.brunofelixdev.mytodoapp.data.pref.setItemsFilter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding
 import com.brunofelixdev.mytodoapp.extension.toast
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
-import com.brunofelixdev.mytodoapp.rv.adapter.ItemLoadStateAdapter
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
@@ -29,7 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ItemFragment : Fragment(), ItemClickListener {
@@ -41,8 +38,7 @@ class ItemFragment : Fragment(), ItemClickListener {
 
     private var uiStateJob: Job? = null
 
-    @Inject
-    lateinit var adapter: ItemAdapter
+    private lateinit var adapter: ItemAdapter
 
     companion object {
         private val TAG: String = ItemFragment::class.java.simpleName
@@ -57,13 +53,13 @@ class ItemFragment : Fragment(), ItemClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentItemBinding.inflate(inflater, container, false)
         initViews()
-        initAdapter()
         collectData()
         return binding.root
     }
 
     override fun onDestroyView() {
         uiStateJob?.cancel()
+        _binding = null
         super.onDestroyView()
     }
 
@@ -91,7 +87,10 @@ class ItemFragment : Fragment(), ItemClickListener {
             findNavController().navigate(action)
         }
 
-        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.rvItems.layoutManager = LinearLayoutManager(
+            requireContext(),
+            RecyclerView.VERTICAL,
+            false)
     }
 
     private fun checkCurrentFilter() {
@@ -109,39 +108,55 @@ class ItemFragment : Fragment(), ItemClickListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun initAdapter() {
-        adapter.listener = this
-        adapter.context = requireContext()
-        binding.rvItems.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = ItemLoadStateAdapter { adapter.retry() },
-            footer = ItemLoadStateAdapter { adapter.retry() }
-        )
+    private fun collectData() {
+        if (getItemsFilter(requireContext()) == Constants.SORT_BY_NAME) {
+            viewModel.fetchAllOrderByName()
+        } else {
+            viewModel.fetchAllOrderByDueDate()
+        }
 
-        adapter.addLoadStateListener { loadState ->
-            binding.tvListTitle.text = "${adapter.itemCount} items"
-            binding.tvListTitle.isVisible = adapter.itemCount > 0
-            binding.tvSortedBy.isVisible = adapter.itemCount > 0
-            binding.includEmptyList.root.isVisible = (adapter.itemCount == 0 &&
-                    loadState.source.refresh is LoadState.NotLoading)
-            binding.rvItems.isVisible = loadState.source.refresh is LoadState.NotLoading
-            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-            binding.btnRetry.isVisible = loadState.source.refresh is LoadState.Error
-
-            val errorState = loadState.source.append as? LoadState.Error
-                ?: loadState.source.prepend as? LoadState.Error
-                ?: loadState.append as? LoadState.Error
-                ?: loadState.prepend as? LoadState.Error
-            errorState?.let {
-                activity?.toast("\uD83D\uDE28 Oops! ${it.error}")
+        uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.items.collect { uiState ->
+                when(uiState) {
+                    is ItemViewModel.UiState.Loading -> {
+                        checkUiState(true)
+                    }
+                    is ItemViewModel.UiState.Success -> {
+                        checkUiState(false)
+                        if (uiState.itemsList != null && uiState.itemsList.isNotEmpty()) {
+                            binding.includEmptyList.root.isVisible = false
+                            adapter = ItemAdapter(requireContext(), uiState.itemsList)
+                            adapter.listener = this@ItemFragment
+                            binding.rvItems.adapter = adapter
+                            binding.tvListTitle.text = "${adapter.itemCount} items"
+                        } else {
+                            binding.includEmptyList.root.isVisible = true
+                            binding.rvItems.isVisible = false
+                            binding.tvListTitle.isVisible = false
+                            binding.tvSortedBy.isVisible = false
+                        }
+                    }
+                    is ItemViewModel.UiState.Error -> {
+                        checkUiState(false)
+                        activity?.toast(uiState.errorMessage)
+                    }
+                    else -> Unit
+                }
             }
         }
     }
 
-    private fun collectData() {
-        uiStateJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.itemsList.collect {
-                adapter.submitData(it)
-            }
+    private fun checkUiState(inLoading: Boolean) {
+        if (inLoading) {
+            binding.progressBar.isVisible = true
+            binding.rvItems.isVisible = false
+            binding.tvListTitle.isVisible = false
+            binding.tvSortedBy.isVisible = false
+        } else {
+            binding.progressBar.isVisible = false
+            binding.rvItems.isVisible = true
+            binding.tvListTitle.isVisible = true
+            binding.tvSortedBy.isVisible = true
         }
     }
 
@@ -156,7 +171,6 @@ class ItemFragment : Fragment(), ItemClickListener {
             setItemsFilter(requireContext(), item)
         }
         builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_ok)) {_, _ ->
-            initAdapter()
             collectData()
             checkCurrentFilter()
         }
@@ -171,6 +185,7 @@ class ItemFragment : Fragment(), ItemClickListener {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton(activity?.resources?.getString(R.string.btn_dialog_yes)) { _, _ ->
             viewModel.checkItemAsDone(item)
+            collectData()
         }
         builder.setNegativeButton(activity?.resources?.getString(R.string.btn_dialog_no)) {_, _ ->
             cbItem.isChecked = false

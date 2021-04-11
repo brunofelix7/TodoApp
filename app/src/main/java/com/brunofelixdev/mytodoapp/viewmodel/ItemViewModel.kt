@@ -2,16 +2,12 @@ package com.brunofelixdev.mytodoapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import com.brunofelixdev.mytodoapp.R
 import com.brunofelixdev.mytodoapp.data.db.OperationResult
 import com.brunofelixdev.mytodoapp.data.db.entity.Item
 import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
-import com.brunofelixdev.mytodoapp.data.pref.getItemsFilter
 import com.brunofelixdev.mytodoapp.extension.cancelWork
 import com.brunofelixdev.mytodoapp.extension.createWork
-import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,16 +23,8 @@ class ItemViewModel @Inject constructor(
     private val defaultDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
-    val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
-
-    val itemsList = Pager(PagingConfig(pageSize = 20, enablePlaceholders = false)) {
-        if (getItemsFilter(resourcesProvider.getApplicationContext()) == Constants.SORT_BY_NAME) {
-            repository.fetchAllOrderByName()
-        } else {
-            repository.fetchAllOrderByDueDate()
-        }
-    }.flow
+    private val _items = MutableStateFlow<UiState>(UiState.Initial)
+    val items: StateFlow<UiState> get() = _items
 
     val formErrors = mutableMapOf<String, String>()
 
@@ -46,28 +34,42 @@ class ItemViewModel @Inject constructor(
         const val FIELD_DUE_TIME = "dueTime"
     }
 
+    fun fetchAllOrderByName() {
+        _items.value = UiState.Loading
+
+        viewModelScope.launch(defaultDispatcher) {
+            _items.value = UiState.Success(repository.fetchAllOrderByName(), null)
+        }
+    }
+
+    fun fetchAllOrderByDueDate() {
+        _items.value = UiState.Loading
+
+        viewModelScope.launch(defaultDispatcher) {
+            _items.value = UiState.Success(repository.fetchAllOrderByDueDate(), null)
+        }
+    }
+
     fun insertItem(item: Item) {
-        _uiStateFlow.value = UiState.Loading
+        _items.value = UiState.Loading
 
         viewModelScope.launch(defaultDispatcher) {
             formValidation(item)
 
             if (formErrors.isNotEmpty()) {
-                _uiStateFlow.value = UiState.Error(
+                _items.value = UiState.Error(
                     resourcesProvider.getResources().getString(R.string.msg_fields_required)
                 )
             } else {
                 when (val result = repository.insert(item)) {
                     is OperationResult.Error -> {
-                        _uiStateFlow.value = UiState.Error(result.message!!)
+                        _items.value = UiState.Error(result.message!!)
                     }
                     is OperationResult.Success -> {
                         resourcesProvider.getApplicationContext().createWork(item, result.data!!)
 
-                        _uiStateFlow.value =
-                            UiState.Success(
-                                resourcesProvider.getResources().getString(R.string.msg_success_add)
-                            )
+                        _items.value = UiState.Success(null,
+                                resourcesProvider.getResources().getString(R.string.msg_success_add))
                     }
                 }
             }
@@ -75,26 +77,25 @@ class ItemViewModel @Inject constructor(
     }
 
     fun checkItemAsDone(item: Item) {
-        _uiStateFlow.value = UiState.Loading
+        _items.value = UiState.Loading
 
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.checkAsDone(item)) {
                 is OperationResult.Success -> {
                     resourcesProvider.getApplicationContext().cancelWork(item.workTag)
 
-                    _uiStateFlow.value = UiState.Success(
-                        resourcesProvider.getResources().getString(R.string.msg_success_check_as_done)
-                    )
+                    _items.value = UiState.Success(null,
+                        resourcesProvider.getResources().getString(R.string.msg_success_check_as_done))
                 }
                 is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
+                    _items.value = UiState.Error(result.message!!)
                 }
             }
         }
     }
 
     fun updateItem(item: Item) {
-        _uiStateFlow.value = UiState.Loading
+        _items.value = UiState.Loading
 
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.update(item)) {
@@ -102,31 +103,29 @@ class ItemViewModel @Inject constructor(
                     resourcesProvider.getApplicationContext().cancelWork(item.workTag)
                     resourcesProvider.getApplicationContext().createWork(item, item.id.toLong())
 
-                    _uiStateFlow.value = UiState.Success(
-                        resourcesProvider.getResources().getString(R.string.msg_success_update)
-                    )
+                    _items.value = UiState.Success(null,
+                        resourcesProvider.getResources().getString(R.string.msg_success_update))
                 }
                 is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
+                    _items.value = UiState.Error(result.message!!)
                 }
             }
         }
     }
 
     fun deleteItem(item: Item) {
-        _uiStateFlow.value = UiState.Loading
+        _items.value = UiState.Loading
 
         viewModelScope.launch(defaultDispatcher) {
             when (val result = repository.delete(item)) {
                 is OperationResult.Success -> {
                     resourcesProvider.getApplicationContext().cancelWork(item.workTag)
 
-                    _uiStateFlow.value = UiState.Success(
-                        resourcesProvider.getResources().getString(R.string.msg_success_delete)
-                    )
+                    _items.value = UiState.Success(null,
+                        resourcesProvider.getResources().getString(R.string.msg_success_delete))
                 }
                 is OperationResult.Error -> {
-                    _uiStateFlow.value = UiState.Error(result.message!!)
+                    _items.value = UiState.Error(result.message!!)
                 }
             }
         }
@@ -150,7 +149,7 @@ class ItemViewModel @Inject constructor(
     sealed class UiState {
         object Initial : UiState()
         object Loading : UiState()
-        class Success(val successMessage: String) : UiState()
+        class Success(val itemsList: List<Item>?, val message: String?) : UiState()
         class Error(val errorMessage: String) : UiState()
     }
 }

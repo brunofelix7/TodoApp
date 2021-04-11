@@ -21,8 +21,4 @@ object AppModuleTest {
         Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
             .allowMainThreadQueries()
             .build()
-
-    @Provides
-    @Named("test_adapter")
-    fun provideItemAdapter(): ItemAdapter = ItemAdapter()
 }
