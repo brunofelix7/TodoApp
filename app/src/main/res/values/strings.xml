@@ -51,6 +51,7 @@
     <!-- TODO: SettingsFragment -->
     <string name="label_theme_settings">Theme</string>
     <string name="txt_theme_settings">Select the theme you would like to view.</string>
+    <string name="txt_radio_system">System</string>
     <string name="radio_light">Light</string>
     <string name="radio_dark">Dark</string>
 
@@ -96,6 +97,6 @@
     <!-- TODO: Preferences Keys -->
     <string name="pref_name">user_preferences</string>
     <string name="pref_key_filter">key-filter</string>
-    <string name="pref_key_night_mode">key-night-mode</string>
+    <string name="pref_key_theme_mode">key-theme-mode</string>
 
 </resources>

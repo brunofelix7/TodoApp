@@ -16,4 +16,8 @@ object Constants {
     const val SORT_BY_NAME: String = "Name"
     const val SORT_BY_DUE_DATE: String = "Due date"
 
+    //  Preferences values
+    const val PREF_SYSTEM = "system"
+    const val PREF_LIGHT = "light"
+    const val PREF_NIGHT = "night"
 }

@@ -86,7 +86,7 @@ class ItemFragment : Fragment(), ItemClickListener {
 
         checkCurrentFilter()
 
-        binding.fab.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             val action = ItemFragmentDirections.navigateToItemForm(null)
             findNavController().navigate(action)
         }

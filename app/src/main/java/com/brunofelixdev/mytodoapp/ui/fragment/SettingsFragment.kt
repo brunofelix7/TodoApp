@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.pref.isNightModeEnabled
-import com.brunofelixdev.mytodoapp.data.pref.setIsNightModeEnabled
+import com.brunofelixdev.mytodoapp.data.pref.getCurrentThemeMode
+import com.brunofelixdev.mytodoapp.data.pref.setCurrentThemeMode
 import com.brunofelixdev.mytodoapp.databinding.FragmentSettingsBinding
+import com.brunofelixdev.mytodoapp.util.Constants
 
 class SettingsFragment : Fragment() {
 
@@ -27,21 +28,32 @@ class SettingsFragment : Fragment() {
     }
 
     private fun initViews() {
-        if (isNightModeEnabled(requireContext())) {
-            binding.radioDark.isChecked = true
-        } else {
-            binding.radioLight.isChecked = true
+        when (getCurrentThemeMode(requireContext())) {
+            Constants.PREF_SYSTEM -> {
+                binding.radioSystem.isChecked = true
+            }
+            Constants.PREF_LIGHT -> {
+                binding.radioLight.isChecked = true
+            }
+            Constants.PREF_NIGHT -> {
+                binding.radioNight.isChecked = true
+            }
         }
 
         binding.rgParent.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
-                R.id.radio_light -> {
-                    setIsNightModeEnabled(requireContext(), false)
+                R.id.radio_system -> {
+                    setCurrentThemeMode(requireContext(), Constants.PREF_SYSTEM)
                     activity?.recreate()
                     activity?.setTheme(R.style.Theme_MyToDoApp)
                 }
-                R.id.radio_dark -> {
-                    setIsNightModeEnabled(requireContext(), true)
+                R.id.radio_light -> {
+                    setCurrentThemeMode(requireContext(), Constants.PREF_LIGHT)
+                    activity?.recreate()
+                    activity?.setTheme(R.style.Theme_MyToDoApp)
+                }
+                R.id.radio_night -> {
+                    setCurrentThemeMode(requireContext(), Constants.PREF_NIGHT)
                     activity?.recreate()
                     activity?.setTheme(R.style.Theme_MyToDoApp)
                 }

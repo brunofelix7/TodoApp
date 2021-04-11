@@ -11,10 +11,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.pref.isNightModeEnabled
+import com.brunofelixdev.mytodoapp.data.pref.getCurrentThemeMode
 import com.brunofelixdev.mytodoapp.databinding.ActivityMainBinding
 import com.brunofelixdev.mytodoapp.ui.fragment.ItemFragmentDirections
 import com.brunofelixdev.mytodoapp.ui.widget.AppWidget
+import com.brunofelixdev.mytodoapp.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        checkNightMode()
+        checkCurrentMode()
         drawerMenuSetup()
 
         val extras = intent.getStringExtra(AppWidget.KEY_WIDGET)
@@ -54,11 +55,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkNightMode() {
-        if (isNightModeEnabled(this)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    private fun checkCurrentMode() {
+        when (getCurrentThemeMode(this)) {
+            Constants.PREF_SYSTEM -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+            Constants.PREF_LIGHT -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            Constants.PREF_NIGHT -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
         }
     }
 
