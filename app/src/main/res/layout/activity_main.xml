@@ -10,26 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/purple_500"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:background="@drawable/bg_toolbar"
+            app:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/app_name"
+                app:titleTextColor="@color/white"
+                app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Tooltip" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:layout_below="@id/toolbar"
-            android:background="@drawable/dropshadow" />
+            android:layout_below="@id/app_bar"
+            android:background="@drawable/dropshadow"
+            android:visibility="visible" />
 
         <fragment
             android:id="@+id/fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/app_bar"
+            android:background="?android:windowBackground"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph"
             tools:ignore="FragmentTagUsage" />
