@@ -1,9 +1,8 @@
-package com.brunofelixdev.mytodoapp.data.db.entity
+package com.brunofelixdev.mytodoapp.data.db
 
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.brunofelixdev.mytodoapp.data.db.DbSchema
 import com.brunofelixdev.mytodoapp.util.Constants
 import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime

@@ -48,7 +48,7 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="currentItem"
-            app:argType="com.brunofelixdev.mytodoapp.data.db.entity.Item"
+            app:argType="com.brunofelixdev.mytodoapp.data.db.Item"
             app:nullable="true" />
         <action
             android:id="@+id/navigateToItemDetails"
@@ -91,7 +91,7 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="currentItem"
-            app:argType="com.brunofelixdev.mytodoapp.data.db.entity.Item" />
+            app:argType="com.brunofelixdev.mytodoapp.data.db.Item" />
         <action
             android:id="@+id/navigateToItemForm"
             app:destination="@id/itemFormFragment"

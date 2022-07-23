@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 

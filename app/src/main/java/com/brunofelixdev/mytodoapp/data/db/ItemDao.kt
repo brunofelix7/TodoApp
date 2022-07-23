@@ -1,8 +1,7 @@
-package com.brunofelixdev.mytodoapp.data.db.dao
+package com.brunofelixdev.mytodoapp.data.db
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
 @Dao
 interface ItemDao {

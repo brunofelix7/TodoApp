@@ -1,10 +1,8 @@
-package com.brunofelixdev.mytodoapp.data.db.repository.contract
+package com.brunofelixdev.mytodoapp.data.db
 
 import androidx.paging.PagingSource
-import com.brunofelixdev.mytodoapp.data.db.OperationResult
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
-interface ItemRepositoryContract {
+interface ItemRepository {
     suspend fun insert(item: Item): OperationResult<Long>
     suspend fun update(item: Item): OperationResult<Unit>
     suspend fun delete(item: Item): OperationResult<Unit>

@@ -3,7 +3,6 @@ package com.brunofelixdev.mytodoapp.extension
 import com.google.common.truth.Truth.assertThat
 import org.joda.time.DateTime
 import org.joda.time.Duration
-import org.joda.time.LocalDateTime
 import org.junit.Test
 
 class DateExtensionTest {
@@ -26,7 +25,7 @@ class DateExtensionTest {
         val date = stringDate.parseToDate(stringDate)
 
         //  when
-        val result = date?.parseToString()
+        val result = date?.parseToString(pattern = "MM-dd-yyyy HH:mm")
 
         //  then
         assertThat(result).isNotNull()
@@ -39,7 +38,7 @@ class DateExtensionTest {
         val date = stringDate.parseToDate(stringDate)
 
         //  when
-        val result = date?.parseToString()
+        val result = date?.parseToString(pattern = "MM-dd-yyyy HH:mm")
 
         //  then
         assertThat(result).isNull()

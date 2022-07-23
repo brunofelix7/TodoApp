@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.brunofelixdev.mytodoapp.data.db.AppDatabase
 import com.brunofelixdev.mytodoapp.data.db.DbSchema
-import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
-import com.brunofelixdev.mytodoapp.data.db.repository.ItemRepository
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
+import com.brunofelixdev.mytodoapp.data.db.ItemDao
+import com.brunofelixdev.mytodoapp.data.db.ItemRepositoryImpl
+import com.brunofelixdev.mytodoapp.data.db.ItemRepository
 import com.brunofelixdev.mytodoapp.rv.adapter.ItemAdapter
 import com.brunofelixdev.mytodoapp.util.ResourceProvider
 import dagger.Module
@@ -36,7 +36,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideItemRepository(dao: ItemDao): ItemRepositoryContract = ItemRepository(dao)
+    fun provideItemRepository(dao: ItemDao): ItemRepository = ItemRepositoryImpl(dao)
 
     @Singleton
     @Provides

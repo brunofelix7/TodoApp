@@ -15,7 +15,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.data.pref.getItemsFilter
 import com.brunofelixdev.mytodoapp.data.pref.setItemsFilter
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemBinding

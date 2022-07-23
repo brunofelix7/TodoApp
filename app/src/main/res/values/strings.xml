@@ -98,5 +98,6 @@
     <string name="pref_name">user_preferences</string>
     <string name="pref_key_filter">key-filter</string>
     <string name="pref_key_theme_mode">key-theme-mode</string>
+    <string name="save">Save</string>
 
 </resources>

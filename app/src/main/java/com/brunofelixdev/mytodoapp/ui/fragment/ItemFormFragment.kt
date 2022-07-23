@@ -15,10 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemFormBinding
 import com.brunofelixdev.mytodoapp.extension.*
-import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -157,6 +156,10 @@ class ItemFormFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             activity?.hideKeyboard()
             getDateTimeCalendar()
             TimePickerDialog(requireContext(), this, hour, minute, false).show()
+        }
+
+        binding.btnSave.setOnClickListener {
+            submitForm()
         }
     }
 

@@ -1,7 +1,7 @@
 package com.brunofelixdev.mytodoapp.rv.listener
 
 import android.widget.CheckBox
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 
 interface ItemClickListener {
     fun onCheckedClick(item: Item, cbItem: CheckBox)

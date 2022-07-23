@@ -1,20 +1,16 @@
-package com.brunofelixdev.mytodoapp.data.db.repository
+package com.brunofelixdev.mytodoapp.data.db
 
 import android.util.Log
 import androidx.paging.PagingSource
-import com.brunofelixdev.mytodoapp.data.db.OperationResult
-import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
-import com.brunofelixdev.mytodoapp.data.db.repository.contract.ItemRepositoryContract
 import java.util.*
 import javax.inject.Inject
 
-class ItemRepository @Inject constructor(
+class ItemRepositoryImpl @Inject constructor(
     private val dao: ItemDao
-) : ItemRepositoryContract {
+) : ItemRepository {
 
     companion object {
-        private val TAG: String = ItemRepositoryContract::class.java.simpleName
+        private val TAG: String = ItemRepository::class.java.simpleName
     }
 
     override suspend fun insert(item: Item): OperationResult<Long> {

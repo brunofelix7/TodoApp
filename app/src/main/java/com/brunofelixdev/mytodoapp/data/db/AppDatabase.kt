@@ -2,8 +2,6 @@ package com.brunofelixdev.mytodoapp.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.brunofelixdev.mytodoapp.data.db.dao.ItemDao
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
 
 @Database(
     entities = [Item::class],

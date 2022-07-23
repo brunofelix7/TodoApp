@@ -13,7 +13,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.ui.activity.MainActivity
 import com.brunofelixdev.mytodoapp.util.Constants
 import com.brunofelixdev.mytodoapp.worker.ItemWorker

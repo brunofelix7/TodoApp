@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.brunofelixdev.mytodoapp.rv.viewholder.ItemViewHolder
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.databinding.RowItemBinding
 import com.brunofelixdev.mytodoapp.rv.listener.ItemClickListener
 

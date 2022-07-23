@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.brunofelixdev.mytodoapp.R
-import com.brunofelixdev.mytodoapp.data.db.entity.Item
+import com.brunofelixdev.mytodoapp.data.db.Item
 import com.brunofelixdev.mytodoapp.databinding.FragmentItemDetailsBinding
 import com.brunofelixdev.mytodoapp.extension.*
 import com.brunofelixdev.mytodoapp.viewmodel.ItemViewModel
